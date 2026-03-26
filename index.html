@@ -1,1 +1,1950 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>SecureCam | Smart CCTV Solutions</title>
+    <meta name="description" content="Buy the best CCTV and smart security cameras in India.">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,600;0,700;1,700;1,900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            databaseURL: "https://deewali-decore-default-rtdb.firebaseio.com/",
+            projectId: "deewali-decore",
+            messagingSenderId: "58828615961"
+        };
+        const app = firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+    </script>
+
+    <style>
+        :root {
+            --primary: #0F172A;     
+            --accent: #EAB308;      
+            --bg: #F8FAFC;          
+            --surface: #FFFFFF;     
+            --line: #E2E8F0;        
+            --muted: #64748B;       
+            --accentText: #000000;  
+            --success: #10B981;     
+            --radius: 12px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            --shadow-sm: 0 1px 3px rgba(0,0,0,.08);
+            --safe: env(safe-area-inset-bottom, 0px);
+            --container: 740px;
+        }
+
+        * { box-sizing: border-box; }
+        html, body { height: 100%; }
+        
+        body { 
+            margin: 0; 
+            background: var(--bg); 
+            color: #0F172A; 
+            font-family: Inter, system-ui, -apple-system, sans-serif; 
+            line-height: 1.4; 
+        }
+        
+        img { max-width: 100%; display: block; }
+        button { font: inherit; cursor: pointer; }
+        a { color: inherit; text-decoration: none; }
+
+        #app { min-height: 100dvh; display: flex; flex-direction: column; }
+        
+        .wrap { 
+            max-width: var(--container); 
+            margin: 0 auto; 
+            background: #fff; 
+            box-shadow: 0 0 20px rgba(0,0,0,0.05); 
+        }
+
+        /* Fast & Smooth Page Transition */
+        @keyframes fadeSlideUp { 
+            0% { opacity: 0; transform: translateY(12px) scale(0.98); } 
+            100% { opacity: 1; transform: translateY(0) scale(1); } 
+        }
+        
+        #view { animation: fadeSlideUp 0.25s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+
+        /* Topbar & Tabbar */
+        .topbar { position: sticky; top: 0; z-index: 20; background: rgba(255,255,255,0.98); backdrop-filter: saturate(180%) blur(10px); border-bottom: 1px solid var(--line); }
+        .topbar-inner { height: 60px; display: flex; align-items: center; gap: 12px; padding: 0 16px; }
+        .title { font-family: Poppins, sans-serif; font-size: 22px; font-weight: 900; font-style: italic; margin: 0; color: var(--primary); letter-spacing: -0.5px; }
+        .title span { color: var(--accent); } 
+        .icon-round { width: 38px; height: 38px; border-radius: 999px; border: 1px solid var(--line); background: #fff; display: inline-grid; place-items: center; color: var(--primary); box-shadow: var(--shadow-sm); transition: 0.2s; }
+        .icon-round:active { transform: scale(0.9); }
+
+        .tabbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; background: rgba(255,255,255,.98); border-top: 1px solid var(--line); backdrop-filter: saturate(180%) blur(10px); padding-bottom: var(--safe); }
+        .tabbar-inner { max-width: var(--container); margin: 0 auto; display: grid; grid-template-columns: repeat(4,1fr); gap: 2px; padding: 8px 8px calc(10px + var(--safe)); }
+        .tab { display: flex; flex-direction: column; align-items: center; gap: 4px; color: #94A3B8; padding: 8px 4px; border-radius: 12px; transition: 0.2s; }
+        .tab.active { color: var(--accent); background: #FEF9C3; transform: scale(1.05); }
+        .tab span { font-size: 12px; font-weight: 700; color: #0F172A; }
+        main { flex: 1; min-height: 0; padding-bottom: 100px; }
+        
+        .loader { text-align: center; padding: 40px; color: var(--muted); }
+        .loader .dot { display: inline-block; width: 10px; height: 10px; background: var(--primary); border-radius: 999px; margin: 0 3px; animation: bounce 1.4s infinite ease-in-out both; }
+        .loader .dot:nth-child(1) { animation-delay: -.32s; }
+        .loader .dot:nth-child(2) { animation-delay: -.16s; }
+        @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1.0); } }
+
+        /* UI Elements */
+        .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); transition: transform 0.2s, box-shadow 0.2s; }
+        .card.pad { padding: 18px; }
+        .muted { color: var(--muted); }
+        .chip { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line); background: #fff; font-size: 13px; font-weight: 700; color: var(--primary); transition: 0.2s; }
+        .chip.active { background: var(--primary); color: #fff; border-color: var(--primary); transform: scale(1.05); }
+        
+        input, textarea, select { width: 100%; padding: 14px 16px; border: 1px solid var(--line); border-radius: 12px; background: #F8FAFC; font: inherit; color: #0F172A; transition: 0.2s; }
+        input:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(15,23,42,0.1); background: #fff; }
+        textarea { min-height: 92px; resize: vertical; }
+        label { font-size: 13px; color: #475569; margin: 12px 0 6px; display: block; font-weight: 700; }
+        
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; font-weight: 800; font-size: 16px; border: none; border-radius: 12px; padding: 16px 20px; background: var(--accent); color: var(--accentText); box-shadow: 0 4px 15px rgba(234, 179, 8, 0.4); transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1); cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; }
+        .btn:active { transform: translateY(2px) scale(0.95); box-shadow: 0 2px 8px rgba(234, 179, 8, 0.4); }
+        .btn-outline { background: transparent; color: var(--primary); border: 2px solid var(--primary); box-shadow: none; font-weight: 800; }
+        .btn-outline:active { background: #F1F5F9; transform: scale(0.97); }
+        .btn-block { width: 100%; }
+        
+        @keyframes pulseYellow { 0% { box-shadow: 0 0 0 0 rgba(234, 179, 8, 0.6); } 70% { box-shadow: 0 0 0 12px rgba(234, 179, 8, 0); } 100% { box-shadow: 0 0 0 0 rgba(234, 179, 8, 0); } }
+        .btn-pulse { animation: pulseYellow 1.5s infinite; }
+
+        .shimmer-text { background: linear-gradient(90deg, var(--primary) 0%, #3B82F6 50%, var(--primary) 100%); background-size: 200% auto; color: transparent; -webkit-background-clip: text; animation: shimmer 2.5s linear infinite; font-weight: 900; }
+        @keyframes shimmer { to { background-position: 200% center; } }
+
+        /* Aggressive FOMO/Urgency Box */
+        .urgency-box { background: #FEF2F2; border: 2px dashed #EF4444; color: #B91C1C; padding: 14px; border-radius: 10px; font-size: 14px; font-weight: 700; display: flex; align-items: flex-start; gap: 12px; margin: 16px 0; animation: blinkBorderScare 1s infinite; box-shadow: inset 0 0 10px rgba(239, 68, 68, 0.1); }
+        .urgency-box i { font-size: 22px; margin-top: 2px; color: #DC2626; animation: shakeIcon 0.5s infinite; }
+        @keyframes blinkBorderScare { 0% { border-color: #EF4444; background: #FEF2F2; } 50% { border-color: #B91C1C; background: #FFF1F2; } 100% { border-color: #EF4444; background: #FEF2F2; } }
+        @keyframes shakeIcon { 0%, 100% { transform: rotate(0deg); } 25% { transform: rotate(-10deg); } 75% { transform: rotate(10deg); } }
+
+        /* Scare Banner */
+        .scare-banner { background: #000; color: #fff; padding: 12px 16px; display: flex; gap: 12px; align-items: center; border-bottom: 3px solid #EF4444; }
+        .scare-banner-text { flex: 1; font-size: 13px; font-weight: 700; line-height: 1.4; }
+        .scare-banner-text span { color: #F87171; font-weight: 900; font-size: 15px; }
+
+        /* Ratings */
+        .star-rating { color: #F59E0B; font-size: 13px; font-weight: 800; display: flex; align-items: center; gap: 4px; }
+        .star-rating .fa-regular { color: #E2E8F0; }
+        .rate-stars .fa-star { cursor: pointer; transition: color .2s; }
+        .rate-stars .active { color: #F59E0B; }
+        
+        /* Quantity */
+        .size-btn { display: inline-flex; align-items: center; justify-content: center; height: 50px; min-width: 50px; padding: 0 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); font-weight: 800; font-size: 18px; box-shadow: var(--shadow-sm); transition: 0.2s; }
+        .size-btn.active, .size-btn:active { transform: translateY(1px); box-shadow: 0 1px 2px rgba(10,10,10,.06); background: #FEF9C3; border-color: var(--accent); border: 2px solid var(--accent); color: var(--primary); }
+        
+        .price-line { display: flex; align-items: center; gap: 6px; }
+        .strike { color: #94A3B8; text-decoration: line-through; font-size: 12px; font-weight: 600;}
+        
+        /* Badges & Overlays */
+        .flash-deal-badge { position: absolute; top: 0; left: 0; background: #EF4444; color: #fff; font-size: 11px; font-weight: 900; padding: 6px 10px; border-radius: 8px 0 12px 0; z-index: 5; display: flex; align-items: center; gap: 4px; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 2px 2px 10px rgba(0,0,0,0.2); }
+        .trust-badge-rzp { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 12px; padding: 10px; background: #F0FDF4; border: 1px solid #10B981; border-radius: 8px; color: #047857; font-size: 13px; font-weight: 800; }
+        
+        .free-delivery-badge { background: #ECFDF5; border: 1px solid #A7F3D0; color: #059669; font-size: 11px; font-weight: 800; padding: 6px; border-radius: 6px; display: flex; align-items: center; gap: 6px; margin-top: 8px; text-transform: uppercase; }
+
+        /* Shopify Style Slider */
+        .slider-wrap { position: relative; background: #fff; border-bottom: 1px solid var(--line); padding-bottom: 20px; }
+        .img-slider { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; -ms-overflow-style: none; }
+        .img-slider::-webkit-scrollbar { display: none; }
+        .img-slider .slide { flex: 0 0 100%; scroll-snap-align: center; width: 100%; max-height: 380px; object-fit: contain; mix-blend-mode: multiply; padding: 20px; }
+        .slider-dots { display: flex; justify-content: center; gap: 6px; position: absolute; bottom: 12px; left: 0; right: 0; }
+        .slider-dots .dot { width: 8px; height: 8px; border-radius: 50%; background: #CBD5E1; transition: 0.3s; }
+        .slider-dots .dot.active { background: var(--primary); width: 24px; border-radius: 4px; }
+
+        /* Customer Reviews Section */
+        .review-card { background: #fff; border-bottom: 1px solid var(--line); padding: 16px 0; margin-bottom: 0; }
+        .review-card:last-child { border-bottom: none; }
+        .review-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; }
+        .review-name { font-weight: 800; font-size: 14px; color: #0F172A; display: flex; align-items: center; gap: 6px; }
+        .verified-badge { color: #10B981; font-size: 13px; }
+        .review-text { font-size: 13px; color: #334155; line-height: 1.5; font-weight: 500; }
+
+        /* Mobile Responsive Grids & Cards - E-commerce Standard */
+        .filters { display: flex; gap: 10px; overflow: auto; padding: 12px 16px; scrollbar-width: none; background: #fff; border-bottom: 1px solid var(--line); }
+        .filters::-webkit-scrollbar { display: none; }
+        
+        /* 2-Column strict mobile grid */
+        .grid { 
+            display: grid; 
+            gap: 10px; 
+            grid-template-columns: 1fr 1fr; 
+            padding: 12px; 
+            background: var(--bg);
+        }
+        @media(min-width:680px) { .grid { grid-template-columns: repeat(3, 1fr); gap: 16px; padding: 16px; } }
+        
+        .p-card { 
+            overflow: hidden; 
+            position: relative; 
+            transition: 0.2s; 
+            border-radius: 10px; 
+            border: 1px solid var(--line); 
+            background: #fff; 
+            display: flex; 
+            flex-direction: column; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.06);
+        }
+        .p-card:active { transform: scale(0.98); }
+        .p-img { position: relative; width: 100%; aspect-ratio: 1/1; background: #fff; padding: 12px; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid #F1F5F9; }
+        .p-img img { width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply; transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        .p-card:hover .p-img img { transform: scale(1.08); }
+        .p-meta { padding: 10px; display: flex; flex-direction: column; flex: 1; justify-content: flex-start; }
+        
+        /* Truncate text to max 2 lines to keep cards uniform */
+        .p-title { 
+            font-weight: 700; 
+            font-size: 13px; 
+            line-height: 1.4; 
+            margin-bottom: 4px; 
+            color: #0F172A; 
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            height: 36px;
+        }
+        
+        /* Compact Direct Buy Button on Grid */
+        .quick-buy-btn { 
+            width: calc(100% - 16px); 
+            padding: 10px 0; 
+            margin: 0 8px 8px 8px; 
+            font-size: 14px; 
+            font-weight: 900; 
+            border-radius: 8px; 
+            box-shadow: none;
+            background: #0F172A;
+            color: #fff;
+            animation: none; 
+        }
+        .quick-buy-btn:active { background: #000; }
+
+        .hero-img { margin: 12px; border-radius: 12px; overflow: hidden; max-height: 400px; display: flex; box-shadow: var(--shadow); }
+        .hero-img img { width: 100%; aspect-ratio: 1/1.2; object-fit: cover; object-position: center top; }
+
+        /* Cart */
+        .cart-list { display: flex; flex-direction: column; gap: 10px; padding: 12px; }
+        .cart-item { display: grid; grid-template-columns: 80px 1fr auto; gap: 12px; align-items: center; padding: 12px; border-radius: 10px; border: 1px solid var(--line); background: #fff; }
+        .cart-item img { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid var(--line); }
+        .qty { display: flex; align-items: center; gap: 12px; margin-top: 8px; }
+        .circle-btn { width: 32px; height: 32px; border-radius: 999px; border: 2px solid var(--line); display: grid; place-items: center; background: #F8FAFC; color: #0F172A; font-weight: 800; font-size: 16px; }
+        .circle-btn.primary { background: #0F172A; color: #fff; border-color: #0F172A; }
+
+        .sticky-sheet { position: sticky; bottom: 0; background: rgba(255,255,255,.98); backdrop-filter: blur(10px); border-top: 1px solid var(--line); padding: 16px; z-index: 10; box-shadow: 0 -4px 20px rgba(0,0,0,0.1); }
+        .row { display: flex; align-items: center; justify-content: space-between; }
+        .sep { height: 1px; background: var(--line); margin: 12px 0; }
+
+        /* Animations */
+        .success-wrap { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; text-align: center; }
+        .check-anim { width: 90px; height: 90px; border-radius: 50%; background: #10B981; display: grid; place-items: center; color: #fff; font-size: 45px; margin-bottom: 20px; animation: pop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, glowSuccess 2s infinite alternate; box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4); }
+        @keyframes pop { from { transform: scale(0); } to { transform: scale(1); } }
+        @keyframes glowSuccess { from { box-shadow: 0 0 10px rgba(16, 185, 129, 0.4); } to { box-shadow: 0 0 30px rgba(16, 185, 129, 0.8); } }
+        
+        .confetti { position: relative; width: 100%; height: 0; overflow: visible; }
+        .confetti span { position: absolute; width: 10px; height: 20px; border-radius: 4px; animation: fall 1.5s linear forwards; }
+        @keyframes fall { to { transform: translateY(300px) rotate(360deg); opacity: 0; } }
+
+        .toast { position: fixed; left: 50%; bottom: calc(84px + var(--safe)); transform: translateX(-50%); background: #0F172A; color: #fff; padding: 12px 24px; border-radius: 999px; font-size: 14px; font-weight: 700; opacity: 0; pointer-events: none; transition: opacity .3s, transform 0.3s; z-index: 100; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(-10px); }
+        
+        .animated-banner-wrap { background: linear-gradient(90deg, #FF1100, #991B1B); color: #fff; overflow: hidden; white-space: nowrap; position: relative; height: 40px; line-height: 40px; text-align: center; font-size: 15px; font-weight: 900; letter-spacing: 0.5px; border-bottom: 2px solid #7F1D1D; }
+        .animated-banner-text { display: inline-block; padding-left: 100%; animation: marquee 15s linear infinite; }
+        @keyframes marquee { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
+
+        /* Security Shield CSS Animation */
+        @keyframes pulseShield { 
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); } 
+            70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(16, 185, 129, 0); } 
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } 
+        }
+        .shield-icon { animation: pulseShield 2s infinite; color: var(--success); font-size: 50px; }
+
+        /* Admin CSS */
+        #admin-app { display: none; }
+        .admin-wrap { padding: 16px; padding-bottom: 120px; }
+        .admin-card { background: #fff; border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); padding: 20px; margin-bottom: 16px; }
+        .admin-cta { position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; background: rgba(255,255,255,.98); border-top: 1px solid var(--line); padding: 12px calc(12px + var(--safe)); display: flex; gap: 10px; }
+        .table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        .table th, .table td { border-bottom: 1px solid var(--line); padding: 12px 8px; text-align: left; vertical-align: middle; }
+        .dropzone { border: 2px dashed #94A3B8; border-radius: 12px; padding: 30px; text-align: center; background: #F8FAFC; color: var(--muted); cursor: pointer; transition: 0.2s; }
+        .dropzone:hover { border-color: var(--primary); background: #EFF6FF; }
+        
+        .thumb-wrap { position: relative; display: inline-block; }
+        .thumb { width: 80px; height: 80px; border-radius: 8px; overflow: hidden; border: 1px solid var(--line); }
+        .thumb img { width: 100%; height: 100%; object-fit: cover; }
+        .thumb-del { position: absolute; top: -6px; right: -6px; background: #EF4444; color: #fff; border: none; border-radius: 50%; width: 22px; height: 22px; font-size: 12px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.2); z-index: 5; display: flex; align-items: center; justify-content: center; }
+
+        .like-btn { position: absolute; top: 8px; right: 8px; width: 30px; height: 30px; border-radius: 999px; background: rgba(255,255,255,.95); backdrop-filter: blur(4px); display: grid; place-items: center; color: #CBD5E1; font-size: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); transition: 0.2s; z-index: 10; border: 1px solid var(--line); }
+        .like-btn.liked { color: #EF4444; transform: scale(1.15); border-color: #FECACA; background: #FEF2F2;} 
+        .profile-head { display: flex; flex-direction: column; align-items: center; gap: 8px; margin: 12px 0 16px; }
+        .avatar { width: 96px; height: 96px; border-radius: 999px; overflow: hidden; border: 3px solid #fff; box-shadow: 0 2px 10px rgba(0,0,0,.1); }
+        .avatar img { width: 100%; height: 100%; object-fit: cover; }
+        
+        /* Chatbot & API specific styles */
+        .chatbot-icon { position: fixed; bottom: calc(96px + var(--safe)); right: 16px; z-index: 50; width: 64px; height: 64px; border-radius: 999px; background: #000; color: #fff; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); display: flex; align-items: center; justify-content: center; font-size: 28px; cursor: pointer; transition: transform 0.2s ease-in-out; border: 2px solid #333; }
+        .chatbot-icon:hover { transform: scale(1.05); }
+        .chatbot-popup { position: fixed; bottom: calc(170px + var(--safe)); right: 16px; width: 340px; max-width: 90%; max-height: 500px; height: 450px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: flex; flex-direction: column; z-index: 50; transform: scale(0.95) translateY(20px); opacity: 0; pointer-events: none; transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.3s; overflow:hidden;}
+        .chatbot-popup.visible { transform: scale(1) translateY(0); opacity: 1; pointer-events: auto; }
+        .chatbot-header { background: #000; color: #fff; padding: 16px; display: flex; align-items: center; justify-content: space-between; font-family: Poppins, sans-serif; }
+        .chatbot-body { flex: 1; padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background: #F8FAFC; }
+        .chatbot-msg-container.user-msg { align-self: flex-end; max-width: 85%; }
+        .chatbot-msg-container.bot-msg { align-self: flex-start; max-width: 85%; }
+        .chatbot-msg { background: #000; color: #fff; padding: 12px 16px; border-radius: 18px; word-wrap: break-word; box-shadow: var(--shadow-sm); font-size: 13px; font-weight: 500; border-bottom-right-radius: 4px; line-height: 1.5; }
+        .chatbot-msg.bot { background: #FFFFFF; color: #0F172A; border: 1px solid var(--line); border-bottom-left-radius: 4px; border-bottom-right-radius: 18px; }
+        
+        .chatbot-footer-input { display: flex; padding: 12px; background: #fff; border-top: 1px solid var(--line); gap: 8px;}
+        .chatbot-footer-input input { flex: 1; padding: 10px 14px; border-radius: 20px; font-size: 13px; margin: 0; border: 1px solid var(--line);}
+        .chatbot-footer-input button { background: var(--primary); color: #fff; border: none; width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; font-size: 16px; transition: 0.2s;}
+        .chatbot-footer-input button:active { transform: scale(0.9); }
+        
+        .chatbot-questions { display: flex; flex-direction: column; gap: 8px; margin-top: 8px;}
+        .chatbot-questions .question-chip { padding: 10px 14px; background: #FFF1F2; border: 1px solid #FECACA; border-radius: 12px; cursor: pointer; color: #B91C1C; font-size: 13px; font-weight: 700; transition: background 0.2s; text-align: left; }
+        .chatbot-questions .question-chip:hover { background: #FFE4E6; }
+
+        /* AI Advisor feature styles */
+        .ai-recipe-btn { background: linear-gradient(135deg, #1E3A8A, #3B82F6); color: #fff; border: none; border-radius: 12px; padding: 16px; width: 100%; font-weight: 800; font-size: 16px; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3); transition: 0.2s; margin-top:16px; cursor:pointer;}
+        .ai-recipe-btn:active { transform: scale(0.97); }
+        .recipe-result-box { background: #F8FAFC; border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-top: 16px; font-size: 14px; line-height: 1.6; white-space: pre-wrap; display:none;}
+    </style>
+</head>
+<body>
+
+<div id="store-app">
+    <div class="animated-banner-wrap" id="animated-banner-wrap" style="display:none">
+        <div class="animated-banner-text" id="animated-banner-text">🚨 CRIME ALERT! Secure your home today with Smart CCTV. 🚨</div>
+    </div>
+    
+    <div id="app" class="wrap">
+        <header class="topbar">
+            <div class="topbar-inner">
+                <button id="back-btn" class="icon-round" aria-label="Back" style="display:none; border:none;"><i class="fa-solid fa-arrow-left"></i></button>
+                <h1 id="page-title" class="title"><i class="fa-solid fa-shield-halved" style="font-size: 20px; color: var(--accent);"></i> Secure<span>Cam</span></h1>
+            </div>
+        </header>
+        
+        <main id="view" aria-live="polite"></main>
+        
+        <nav class="tabbar">
+            <div class="tabbar-inner">
+                <a class="tab" data-tab="home" href="#/home"><i class="fa-solid fa-house"></i><span>Home</span></a>
+                <a class="tab" data-tab="shop" href="#/shop"><i class="fa-solid fa-video"></i><span>Cameras</span></a>
+                <a class="tab" data-tab="cart" href="#/cart"><i class="fa-solid fa-cart-shopping"></i><span>Cart</span></a>
+                <a class="tab" data-tab="account" href="#/account"><i class="fa-regular fa-user"></i><span>Profile</span></a>
+            </div>
+        </nav>
+    </div>
+    
+    <div id="toast" class="toast">Added to cart</div>
+</div>
+
+<div id="admin-app" class="wrap">
+    <header class="topbar">
+        <div class="topbar-inner">
+            <button id="admin-back" class="icon-round" aria-label="Back" style="display:none; border:none;"><i class="fa-solid fa-arrow-left"></i></button>
+            <h1 id="admin-title" class="title">Admin</h1>
+            <div style="margin-left:auto;display:flex;gap:8px">
+                <button class="btn btn-outline" id="admin-logout" style="padding:8px 16px;">Logout</button>
+                <a class="btn btn-outline" href="#/shop" style="padding:8px 16px;">Store</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="admin-wrap">
+        <div id="admin-login" class="admin-card" style="max-width:520px;margin:18px auto;display:none">
+            <h3 style="margin:0 0 16px;font-family:Poppins">Admin Login</h3>
+            <form id="admin-login-form" autocomplete="off">
+                <label>Admin Email</label>
+                <input id="adm-id" type="email" autocomplete="off" required placeholder="admin@securecam.com">
+                <label>Password</label>
+                <input id="adm-pw" type="password" autocomplete="off" required>
+                <button class="btn btn-block" type="submit" style="margin-top:20px;">Secure Login</button>
+            </form>
+        </div>
+
+        <div id="admin-dashboard" class="admin-card" style="display:none">
+            <h3 style="margin:0 0 16px;font-family:Poppins">Admin Dashboard</h3>
+            <div style="display:grid;gap:12px">
+                <a class="btn btn-outline" href="#/admin/banners"><i class="fa-solid fa-image"></i> Store Settings & Banners</a>
+                <a class="btn btn-outline" href="#/admin/add"><i class="fa-solid fa-plus"></i> Add New Camera</a>
+                <a class="btn btn-outline" href="#/admin/manage-cards"><i class="fa-solid fa-box-open"></i> Manage Inventory</a>
+                <a class="btn btn-outline" href="#/admin/orders"><i class="fa-solid fa-truck-fast"></i> View Orders</a>
+                <a class="btn btn-outline" href="#/admin/customers"><i class="fa-solid fa-users"></i> Customers</a>
+            </div>
+        </div>
+        
+        <div id="admin-banners" class="admin-card" style="display:none">
+            <h3 style="margin:0 0 16px;font-family:Poppins; color:var(--primary);">Store Settings & Banners</h3>
+            <form id="banner-form">
+                <label>Top Notification Banner Text</label>
+                <input id="banner-text" type="text" placeholder="e.g., Security Sale! Get 50% OFF today.">
+                <button type="submit" class="btn btn-block" style="margin-top:16px;">Save Banner Text</button>
+            </form>
+            <hr style="margin:24px 0; border:none; border-top:1px solid var(--line);">
+            <form id="hero-form">
+                <label>Home Page Hero Image</label>
+                <div class="dropzone" id="hero-dz" onclick="document.getElementById('hero-upload').click()">
+                    <div><i class="fa-solid fa-cloud-arrow-up" style="font-size:24px; margin-bottom:8px;"></i></div>
+                    <div style="font-weight:700">Click to upload banner</div>
+                </div>
+                <input id="hero-upload" type="file" accept="image/*" style="display:none">
+                <div class="thumbs" id="hero-thumbs" style="margin-top:10px"></div>
+                <button type="submit" class="btn btn-block" style="margin-top:16px;">Save Hero Image</button>
+            </form>
+        </div>
+
+        <div id="admin-add" class="admin-card" style="display:none; padding-bottom:80px;">
+            <h3 style="margin:0 0 16px;font-family:Poppins">Add / Edit Camera</h3>
+            <form id="product-form">
+                <input type="hidden" id="pf-id">
+                
+                <label>Product Name</label>
+                <input id="pf-name" required>
+                
+                <label>Description (Use '-' for bullet points)</label>
+                <textarea id="pf-desc" style="min-height:120px;"></textarea>
+                
+                <label>Category</label>
+                <input id="pf-category" required>
+                
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px;">
+                    <div><label>MRP (Strike-through)</label><input id="pf-mrp" type="number" min="0"></div>
+                    <div><label>Sale Price</label><input id="pf-price" type="number" min="0"></div>
+                </div>
+                
+                <div style="margin-top:12px;">
+                    <label>Discount %</label><input id="pf-disc" type="number" min="0" max="99">
+                </div>
+                
+                <div style="margin-top:16px; padding:12px; border:1px solid var(--primary); border-radius:12px; background:#F8FAFC;">
+                    <label style="color:var(--primary); margin:0 0 6px 0;"><i class="fa-solid fa-link"></i> Payment Link (Razorpay Page)</label>
+                    <input id="pf-paylink" type="url" placeholder="https://rzp.io/l/xyz" style="border:1px solid var(--primary); background:#fff;">
+                    <div style="font-size:11px; color:var(--muted); margin-top:6px;">Put the Razorpay Payment Page link here. Online Payment will redirect here.</div>
+                </div>
+
+                <label style="margin-top:16px;">Product Images (Upload Multiple for Slider)</label>
+                <div class="dropzone" id="dz" onclick="document.getElementById('pf-upload').click()">
+                    <div><i class="fa-solid fa-images" style="font-size:24px; margin-bottom:8px;"></i></div>
+                    <div style="font-weight:700">Click to upload 2-3 product images</div>
+                    <div class="muted" style="font-size:12px; margin-top:4px;">JPG/PNG • Max 1200px</div>
+                </div>
+                <input id="pf-upload" type="file" accept="image/*" multiple style="display:none">
+                <div id="pf-thumbs" style="margin-top:16px; display:flex; gap:12px; flex-wrap:wrap;"></div>
+            </form>
+            
+            <div class="admin-cta">
+                <button class="btn btn-outline" id="pf-reset" style="flex:1;">Reset</button>
+                <button class="btn" id="pf-save" style="flex:2;">Save Product</button>
+            </div>
+        </div>
+
+        <div id="admin-manage-cards" class="admin-card" style="display:none">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                <h3 style="margin:0;font-family:Poppins">Manage Inventory</h3>
+                <a href="#/admin/add" style="color:var(--primary); font-weight:700;">+ Add</a>
+            </div>
+            <div id="mpc-list" style="display:flex;flex-direction:column;gap:12px"></div>
+        </div>
+
+        <div id="admin-orders" class="admin-card" style="display:none">
+            <h3 style="margin:0 0 16px;font-family:Poppins">Manage Orders</h3>
+            <div id="orders-admin" style="overflow-x:auto;"></div>
+        </div>
+
+        <div id="admin-customers" class="admin-card" style="display:none">
+            <h3 style="margin:0 0 16px;font-family:Poppins">Customers</h3>
+            <div id="customers-admin" style="overflow-x:auto;"></div>
+        </div>
+    </div>
+</div>
+
+<button class="chatbot-icon" id="chatbot-toggle">
+    <i class="fa-solid fa-robot"></i>
+</button>
+
+<div class="chatbot-popup" id="chatbot-popup">
+    <div class="chatbot-header">
+        <div style="font-weight:800; font-size:16px;"><i class="fa-solid fa-shield-halved" style="color:var(--accent);"></i> Security Bot ✨</div>
+        <button class="icon-round" style="background:transparent;border:none;color:var(--accentText);width:28px;height:28px;box-shadow:none;" id="chatbot-close">
+            <i class="fa-solid fa-xmark" style="font-size:20px;"></i>
+        </button>
+    </div>
+    <div class="chatbot-body" id="chatbot-body">
+        <div class="chatbot-questions" id="chatbot-questions"></div>
+    </div>
+    <div class="chatbot-footer-input">
+        <input type="text" id="chat-input" placeholder="Type a message..." autocomplete="off">
+        <button id="chat-send"><i class="fa-solid fa-paper-plane"></i></button>
+    </div>
+</div>
+
+<script>
+/* ===== GEMINI API CONFIGURATION ===== */
+const apiKey = ""; // API key is populated automatically by environment
+
+// Fetch wrapper with exponential backoff for Gemini API
+async function fetchGeminiAPI(promptText, systemPrompt) {
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+    const payload = {
+        contents: [{ parts: [{ text: promptText }] }],
+        systemInstruction: { parts: [{ text: systemPrompt }] }
+    };
+    
+    let retries = 5;
+    let delay = 1000;
+    
+    while(retries > 0) {
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            if(!response.ok) throw new Error(`API Error: ${response.status}`);
+            const data = await response.json();
+            return data.candidates?.[0]?.content?.parts?.[0]?.text || "Mafi chahunga, server busy hai. Please call support.";
+        } catch (err) {
+            retries--;
+            if(retries === 0) return "Connection error! Server slow hai. Jaldi order karo!";
+            await new Promise(r => setTimeout(r, delay));
+            delay *= 2;
+        }
+    }
+}
+
+
+/* ===== Config & Utils ===== */
+let HERO_IMAGE_URL = ""; 
+let BANNER_TEXT = "🚨 CRIME ALERT! Secure your home today with Smart CCTV. 🚨";
+
+const $ = s => document.querySelector(s); 
+const $$ = s => Array.from(document.querySelectorAll(s));
+const money = n => `₹${(n||0).toLocaleString("en-IN")}`;
+const uid = () => 'p_' + Math.random().toString(36).slice(2) + Date.now().toString(36);
+
+const readLocal = (k, d) => { 
+    try { 
+        return JSON.parse(localStorage.getItem(k) || JSON.stringify(d)); 
+    } catch { 
+        return d; 
+    } 
+};
+
+const writeLocal = (k, v) => localStorage.setItem(k, JSON.stringify(v));
+const escapeHtml = (s="") => s.replace(/[&<>"']/g, m => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[m]));
+
+// Parse markdown to minimal HTML for Gemini API responses
+function parseGeminiMarkdown(text) {
+    let html = escapeHtml(text);
+    html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+    html = html.replace(/\n/g, '<br>');
+    return html;
+}
+
+const toast = (msg) => { 
+    const t = $("#toast"); 
+    t.textContent = msg; 
+    t.classList.add("show"); 
+    setTimeout(()=> t.classList.remove("show"), 2000); 
+};
+
+const routeTo = (hash) => { location.hash = hash; };
+
+function formatDesc(text) { 
+    if(!text) return ""; 
+    return escapeHtml(text).replace(/\n/g, '<br/>').replace(/- (.*?)<br\/>/g, '• <b>$1</b><br/>').replace(/- (.*?)$/g, '• <b>$1</b>'); 
+}
+
+/* ===== TIMER LOGIC ===== */
+let activeIntervals = [];
+
+function startTimer(durationInSeconds, displayId) {
+    let timer = durationInSeconds, minutes, seconds;
+    const display = document.getElementById(displayId);
+    if(!display) return;
+    
+    activeIntervals.forEach(clearInterval); 
+    activeIntervals = [];
+    
+    const interval = setInterval(function () {
+        minutes = parseInt(timer / 60, 10); 
+        seconds = parseInt(timer % 60, 10);
+        minutes = minutes < 10 ? "0" + minutes : minutes; 
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+        
+        if(document.getElementById(displayId)) {
+            document.getElementById(displayId).textContent = minutes + ":" + seconds;
+        } else {
+            clearInterval(interval);
+        }
+        
+        if (--timer < 0) { 
+            // Restart timer to keep urgency loop alive for late buyers
+            timer = 15 * 60; 
+        } 
+    }, 1000);
+    
+    activeIntervals.push(interval);
+}
+
+/* ===== SLIDER LOGIC ===== */
+window.updateDots = (e) => {
+    const slider = e.target;
+    const index = Math.round(slider.scrollLeft / slider.clientWidth);
+    const dots = slider.parentElement.querySelectorAll('.slider-dots .dot');
+    dots.forEach((d, i) => {
+        d.classList.toggle('active', i === index);
+    });
+};
+
+/* ===== DYNAMIC FAKE REVIEWS GENERATOR ===== */
+const FAKE_REVIEW_POOL = [
+    { name: "Rahul Sharma", text: "Bohot badhiya camera hai! Ab chori ka dar nahi lagta. Night vision bohot clear hai.", rating: 5 },
+    { name: "Priya Verma", text: "Delivery was super fast within 2 days. The app is very easy to use and setup.", rating: 5 },
+    { name: "Amit Kumar", text: "Best security system! I can watch my shop from anywhere on my mobile.", rating: 4 },
+    { name: "Sneha Gupta", text: "I bought this for my parents. It's very safe and gives us peace of mind.", rating: 5 },
+    { name: "Vikas Singh", text: "Value for money. Build quality is solid and it captures HD video.", rating: 4 },
+    { name: "Pooja Das", text: "Looks stylish and very discreet. The motion detection alert is super fast.", rating: 5 },
+    { name: "Ravi Patel", text: "Awesome product! Working flawlessly for the past 2 months. Customer support is responsive.", rating: 5 },
+    { name: "Neha Joshi", text: "Perfect for our building parking. Covered a wide angle and clear faces.", rating: 4 },
+    { name: "Suresh Menon", text: "Good product but wire could be longer. The camera works beautifully though.", rating: 4 },
+    { name: "Anjali Tiwari", text: "Two-way talk feature is amazing. I can talk to the delivery guy directly from the camera.", rating: 5 },
+    { name: "Manish Reddy", text: "Saves a lot of money compared to hiring a security guard. Great for small offices.", rating: 5 },
+    { name: "Kavita R", text: "Installation was easy. I use it daily to check on my kids at home.", rating: 4 },
+    { name: "Kunal Bhatia", text: "Excellent clarity. Even in pitch dark, it shows everything clearly.", rating: 5 },
+    { name: "Nisha Agarwal", text: "Switched to this smart CCTV. Very happy with the cloud recording feature.", rating: 5 },
+    { name: "Rajesh K", text: "A bit tricky to connect to WiFi at first, but very easy once connected.", rating: 4 },
+    { name: "Simran Kaur", text: "Must buy for every Indian home. Keeps unwanted visitors away.", rating: 5 },
+    { name: "Deepak Yadav", text: "Got it during the flash sale, amazing discount. Will buy one more for the backyard.", rating: 5 },
+    { name: "Aarti M", text: "Compact and powerful. The siren feature is very loud and effective.", rating: 4 },
+    { name: "Vikram N", text: "Does the job perfectly. The app notifications are instant.", rating: 5 },
+    { name: "Meena Iyer", text: "Happy with the purchase. The SD card storage is quite useful.", rating: 4 },
+    { name: "Sanjay D", text: "No complicated wiring needed. Completely hassle-free.", rating: 5 },
+    { name: "Ritu S", text: "Very stable connection. Doesn't disconnect from WiFi like my old cameras.", rating: 5 },
+    { name: "Arun V", text: "Good investment. I sleep peacefully knowing my car is under surveillance.", rating: 5 },
+    { name: "Poonam J", text: "Sleek design. My neighbors saw it and asked me for the link!", rating: 5 },
+    { name: "Tarun G", text: "Delivery boy was polite. The camera is working nicely.", rating: 4 }
+];
+
+function generateFakeReviewsHTML(productId, avgRating) {
+    let charCodeSum = 0;
+    for(let i=0; i<productId.length; i++) charCodeSum += productId.charCodeAt(i);
+    
+    let selectedReviews = [];
+    for(let i=0; i<10; i++) {
+        let index = (charCodeSum + (i * 7)) % FAKE_REVIEW_POOL.length;
+        selectedReviews.push(FAKE_REVIEW_POOL[index]);
+    }
+
+    const totalReviewCount = (charCodeSum % 400) + 120; 
+
+    let html = `
+      <div style="margin-top:30px; padding-top:20px; border-top:8px solid var(--bg);">
+          <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:16px; padding: 0 16px;">
+              <div>
+                  <h3 style="margin:0; font-family:Poppins; font-size:18px; font-weight:900;">Customer Reviews</h3>
+                  <div class="muted" style="font-size:12px; margin-top:2px; font-weight:600;">Based on ${totalReviewCount} verified ratings</div>
+              </div>
+              <div style="font-weight:900; color:#0F172A; font-size:18px;"><i class="fa-solid fa-star" style="color:#F59E0B;"></i> ${avgRating}</div>
+          </div>
+          <div style="padding: 0 16px 16px 16px;">
+    `;
+    
+    selectedReviews.forEach(r => {
+        html += createReviewCard(r.name, r.text, r.rating);
+    });
+
+    html += `
+          </div>
+      </div>`;
+      
+    return html;
+}
+
+function createReviewCard(name, text, rating) {
+    let starsHtml = '';
+    for(let i=0; i<5; i++) {
+        starsHtml += `<i class="fa-solid fa-star ${i < rating ? 'active' : 'fa-regular'}" style="${i >= rating ? 'color:#E2E8F0;' : ''}"></i>`;
+    }
+
+    return `
+    <div class="review-card">
+        <div class="review-header">
+            <div class="review-name">${name} <i class="fa-solid fa-circle-check verified-badge" title="Verified Buyer"></i></div>
+            <div class="star-rating" style="font-size:10px;">
+                ${starsHtml}
+            </div>
+        </div>
+        <div class="review-text">${text}</div>
+    </div>`;
+}
+
+/* ===== Data State ===== */
+let PROFILE = readLocal("cctv_profile", { 
+    name:"", phone:"", address:"", pincode:"", city:"", state:"", favorites: [], isComplete:false 
+});
+
+const saveProfile = () => writeLocal("cctv_profile", PROFILE);
+const hasCompleteProfile = () => !!(PROFILE.name && PROFILE.phone && PROFILE.address && PROFILE.pincode);
+
+let PRODUCTS = []; 
+let CART = readLocal("cctv_cart", []);
+
+const saveCart = () => writeLocal("cctv_cart", CART);
+const cartTotal = () => CART.reduce((a,c) => { 
+    const p = PRODUCTS.find(x=>x.id===c.productId); 
+    return a+(p? (p.price||0)*c.qty : 0); 
+}, 0);
+
+let ORDERS = []; 
+let RATINGS = []; 
+let CUSTOMERS = [];
+
+const productsRef = db.ref('products'); 
+const ordersRef = db.ref('orders'); 
+const ratingsRef = db.ref('ratings'); 
+const appConfigRef = db.ref('config');
+
+let dataFetched = { products: false, orders: false, ratings: false, config: false };
+
+function showLoader() { 
+    $("#view").innerHTML = `
+        <div class="loader">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div style="margin-top:12px; font-weight:700;">Loading SecureCam...</div>
+        </div>
+    `; 
+}
+
+function checkAndRender() { 
+    if (dataFetched.products && dataFetched.orders && dataFetched.ratings && dataFetched.config) {
+        render(); 
+    }
+}
+
+productsRef.on('value', snap => { 
+    PRODUCTS = snap.val() ? Object.values(snap.val()) : []; 
+    PRODUCTS.sort((a,b)=>b.createdAt-a.createdAt); 
+    dataFetched.products = true; 
+    checkAndRender(); 
+});
+
+ordersRef.on('value', snap => { 
+    ORDERS = snap.val() ? Object.values(snap.val()) : []; 
+    ORDERS.sort((a,b)=>b.createdAt-a.createdAt); 
+    rebuildCustomers(); 
+    dataFetched.orders = true; 
+    checkAndRender(); 
+});
+
+ratingsRef.on('value', snap => { 
+    RATINGS = snap.val() ? Object.values(snap.val()) : []; 
+    dataFetched.ratings = true; 
+    checkAndRender(); 
+});
+
+appConfigRef.on('value', snap => { 
+    const c = snap.val()||{}; 
+    if(c.heroImage) HERO_IMAGE_URL = c.heroImage; 
+    if(c.bannerText !== undefined) BANNER_TEXT = c.bannerText;
+    
+    if(BANNER_TEXT) { 
+        $("#animated-banner-text").textContent = BANNER_TEXT; 
+        $("#animated-banner-wrap").style.display="block"; 
+    } else { 
+        $("#animated-banner-wrap").style.display="none"; 
+    }
+    
+    dataFetched.config = true; 
+    checkAndRender(); 
+});
+
+/* ===== Router Setup ===== */
+function parseRoute(){ 
+    const h = location.hash.replace(/^#/, "") || "shop"; 
+    return { parts: h.split("?")[0].split("/").filter(Boolean) }; 
+}
+
+function setTopbar(title, showBack){ 
+    if(!title) {
+        $("#page-title").innerHTML = `<i class="fa-solid fa-shield-halved" style="font-size:20px; color: var(--accent);"></i> Secure<span>Cam</span>`;
+    } else {
+        $("#page-title").textContent = title; 
+    }
+    $("#back-btn").style.display = showBack? "inline-grid":"none"; 
+}
+
+function setActiveTab(name){ 
+    $$(".tab").forEach(t => t.classList.toggle("active", t.dataset.tab === name)); 
+}
+
+$("#back-btn").addEventListener("click", ()=> history.back()); 
+$("#admin-back").addEventListener("click", ()=> history.back());
+window.addEventListener("hashchange", render);
+
+function ensureProfileBefore(nextHash){
+  if (!hasCompleteProfile()){ 
+      writeLocal("cctv_next", nextHash || "#/checkout"); 
+      routeTo("#/profile/setup"); 
+      return false; 
+  }
+  return true;
+}
+
+/* ===== GLOBAL TRIGGER QUICK BUY FUNCTION ===== */
+window.triggerQuickBuy = function(e, id) {
+    e.preventDefault();
+    e.stopPropagation();
+    sessionStorage.setItem("cctv_buy_qty", 1);
+    routeTo('#/quick-buy/' + id);
+};
+
+/* ===== Footer Admin Link ===== */
+function AdminFooterLink() {
+    return `<div style="text-align:center; padding: 30px 20px 50px; border-top: 1px solid var(--line); margin-top: 20px;">
+                <a href="#/admin" style="color: var(--muted); font-size: 13px; font-weight: 600;"><i class="fa-solid fa-user-shield"></i> Admin Access</a>
+            </div>`;
+}
+
+/* ===== STORE VIEWS ===== */
+
+function HomeView(){
+  setTopbar("", false); 
+  setActiveTab("home");
+  
+  const viewElement = $("#view");
+  viewElement.innerHTML = `
+    <section style="padding:0 0 16px 0; background:var(--bg);">
+      
+      <div class="scare-banner">
+        <div class="scare-banner-text">⚠️ <span>ALERT:</span> High break-in rates reported recently! Secure your perimeter before it's too late.</div>
+      </div>
+
+      <div style="background: linear-gradient(180deg, #F0FDF4 0%, #FFFFFF 100%); padding-bottom:20px; border-bottom:1px solid var(--line);">
+        ${HERO_IMAGE_URL ? `<div class="hero-img" style="margin:12px; border-radius:12px; border-bottom:1px solid var(--line);"><img src="${HERO_IMAGE_URL}"></div>` : ''}
+        
+        <div style="padding:16px 20px; text-align:center;">
+          <div style="display:flex; justify-content:center; align-items:center; gap: 16px; margin-bottom: 12px;">
+             <i class="fa-solid fa-shield-halved shield-icon"></i>
+             <div class="chip" style="background:#0F172A; border-color:#0F172A; color:#fff; font-size:13px; height: fit-content; text-align:left;">
+                <i class="fa-solid fa-video" style="color:#10B981;"></i> 24/7 Smart Monitoring
+             </div>
+          </div>
+
+          <h2 style="margin:0 0 10px;font-family:Poppins; color:#0F172A; font-size: 28px; line-height:1.15; font-weight:900; letter-spacing:-0.5px;">Chori ka dar khatam,<br><span style="color:var(--accent);">Smart Security shuru.</span></h2>
+          
+          <div class="urgency-box" style="margin: 16px auto; max-width: 320px; justify-content:center;">
+             <i class="fa-solid fa-clock"></i> 
+             <div>Flash Sale Ends In: <span id="home-timer" style="font-size:18px; font-weight:900;">14:59</span></div>
+          </div>
+
+          <button class="btn btn-pulse" onclick="routeTo('#/shop')" style="width:100%; max-width: 320px; font-size:18px;"><i class="fa-solid fa-camera"></i> Protect My Home Now</button>
+        </div>
+      </div>
+      
+      <div style="display:flex; justify-content:space-between; align-items:center; margin:24px 16px 12px;">
+        <h3 style="margin:0;font-family:Poppins; font-weight:900; font-size:18px;">🔥 Top Security Deals</h3>
+        <a href="#/shop" style="color:var(--primary); font-weight:800; font-size:13px;">View All <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+      
+      <div class="grid" id="home-grid"></div>
+      
+      ${AdminFooterLink()}
+    </section>
+  `;
+  
+  startTimer(900, "home-timer");
+
+  const grid = $("#home-grid"); 
+  const featured = PRODUCTS.slice(0, 6); 
+  
+  if (featured.length > 0) { 
+      grid.innerHTML = featured.map(p => ProductCard(p)).join(""); 
+      attachProductCardHandlers(grid); 
+  } else { 
+      grid.innerHTML = `<div class="muted" style="text-align:center;grid-column:1/-1; padding: 20px;">Inventory updating...</div>`; 
+  }
+}
+
+function ShopView(){
+  setTopbar("Shop Cameras", false); 
+  setActiveTab("shop");
+  
+  const categories = [...new Set(PRODUCTS.map(p => p.category).filter(Boolean))];
+  const filtersHtml = categories.map(c => `<button class="chip" data-filter="${escapeHtml(c)}">${escapeHtml(c)}</button>`).join("");
+  
+  $("#view").innerHTML = `
+    <section style="background: var(--bg);">
+      
+      <div class="scare-banner" style="background:#B91C1C;">
+        <i class="fa-solid fa-user-ninja" style="color:#FDE047; font-size:24px; animation: shakeIcon 0.5s infinite;"></i>
+        <div class="scare-banner-text" style="color:#fff;">Stock is clearing fast due to high demand! Limit is 3 units per customer. <span style="color:#FEF08A;">Order quickly!</span></div>
+      </div>
+
+      <div class="filters"><button class="chip active" data-filter="all">All</button>${filtersHtml}</div>
+      
+      <div style="padding:12px 16px 0;">
+          <div style="padding:6px 16px; display:flex; gap:10px; align-items:center; background:#fff; border: 1px solid var(--line); border-radius:12px; box-shadow: var(--shadow-sm);">
+            <i class="fa-solid fa-magnifying-glass" style="color:var(--muted)"></i>
+            <input id="shop-search" placeholder="Search security cameras..." style="border:none; padding:10px 0; outline:none; background:transparent; width:100%; font-weight:600;">
+          </div>
+      </div>
+      
+      <div class="grid" id="shop-grid"></div>
+      
+      <div style="text-align:center; border-top:1px solid var(--line); padding-top:20px; background:var(--bg);">
+        <a href="#/terms" style="color:var(--primary);font-weight:700;font-size:13px;margin:0 10px;text-decoration:underline;">Terms & Conditions</a>
+        <a href="#/privacy" style="color:var(--primary);font-weight:700;font-size:13px;margin:0 10px;text-decoration:underline;">Privacy Policy</a>
+      </div>
+      
+      ${AdminFooterLink()}
+    </section>
+  `;
+  
+  const grid = $("#shop-grid"); 
+  const filterButtons = $$(".filters .chip"); 
+  let activeFilter = "all";
+  
+  const draw = (term="") => {
+    const list = PRODUCTS.filter(p => (activeFilter === "all" || p.category === activeFilter) && (term === "" || p.name.toLowerCase().includes(term.toLowerCase())));
+    grid.innerHTML = list.length ? list.map(p => ProductCard(p)).join("") : `<div class="muted" style="text-align:center;grid-column:1/-1; padding: 40px; font-weight:600;">No cameras found matching your search.</div>`;
+    attachProductCardHandlers(grid);
+  }
+  
+  draw();
+  
+  $("#shop-search").addEventListener("input", (e)=> draw(e.target.value));
+  
+  filterButtons.forEach(btn => btn.addEventListener("click", () => { 
+      filterButtons.forEach(b => b.classList.remove("active")); 
+      btn.classList.add("active"); 
+      activeFilter = btn.dataset.filter; 
+      draw($("#shop-search").value); 
+  }));
+}
+
+function getProductRating(id) {
+  const pr = RATINGS.filter(r => r.productId === id); 
+  if (pr.length === 0) return "4.8"; // Default high fake rating for e-commerce feel
+  return (pr.reduce((sum, r) => sum + r.rating, 0) / pr.length).toFixed(1);
+}
+
+function ProductCard(p){
+  const off = p.discountPercent ? `<div class="flash-deal-badge"><i class="fa-solid fa-tag"></i> ${p.discountPercent}% OFF</div>` : "";
+  const avg = getProductRating(p.id); 
+  const ratingHTML = avg > 0 ? `<div class="star-rating"><i class="fa-solid fa-star"></i> ${avg}</div>` : '';
+  const isFav = PROFILE.favorites.includes(p.id); 
+  const likeClass = isFav ? 'liked' : '';
+  
+  return `
+    <div class="p-card">
+      ${off}
+      <button class="like-btn ${likeClass}" data-product-id="${p.id}"><i class="fa-solid fa-heart"></i></button>
+      <a href="#/product/${p.id}" data-open="${p.id}" style="display:flex; flex-direction:column; flex:1; text-decoration:none; color:inherit;">
+          <div class="p-img"><img src="${(p.imageUrls[0]||"")}"></div>
+          <div class="p-meta">
+            <div class="p-title">${escapeHtml(p.name)}</div>
+            ${ratingHTML}
+            <div style="display:flex;align-items:flex-end; gap:8px; margin-top:8px;">
+                <div class="shimmer-text" style="font-size:18px; line-height:1;">${money(p.price||0)}</div>
+                ${p.priceMrp ? `<div class="strike">${money(p.priceMrp)}</div>` : ""}
+            </div>
+            <div class="free-delivery-badge"><i class="fa-solid fa-truck-fast"></i> Free Delivery</div>
+          </div>
+      </a>
+      <button class="btn quick-buy-btn" onclick="triggerQuickBuy(event, '${p.id}')">Buy Now</button>
+    </div>
+  `;
+}
+
+function attachProductCardHandlers(scope){
+  if (!scope) return;
+  scope.querySelectorAll(".like-btn").forEach(btn => btn.addEventListener("click", (e) => { 
+      e.preventDefault(); 
+      e.stopPropagation(); 
+      toggleFavorite(btn.dataset.productId, btn); 
+  }));
+}
+
+function ProductView(id){
+  const p = PRODUCTS.find(x=>x.id===id); 
+  if(!p){ routeTo("#/shop"); return; }
+  
+  setTopbar("Camera Details", true); 
+  setActiveTab("");
+  
+  const avgRating = getProductRating(p.id); 
+  const isFav = PROFILE.favorites.includes(p.id); 
+  const likeClass = isFav ? 'liked' : '';
+  
+  const hasMultipleImages = p.imageUrls && p.imageUrls.length > 1;
+  const sliderHTML = `
+      <div class="slider-wrap">
+          ${p.discountPercent ? `<div class="flash-deal-badge" style="top:20px; font-size:14px; padding:8px 16px; border-radius:0 12px 12px 0;"><i class="fa-solid fa-fire"></i> DEAL: ${p.discountPercent}% OFF</div>` : ''}
+          <div class="img-slider" onscroll="updateDots(event)">
+              ${p.imageUrls.map(url => `<img class="slide" src="${url}">`).join('')}
+          </div>
+          ${hasMultipleImages ? `
+          <div class="slider-dots">
+              ${p.imageUrls.map((_, i) => `<span class="dot ${i===0?'active':''}"></span>`).join('')}
+          </div>` : ''}
+      </div>
+  `;
+  
+  const fakeReviewsHTML = generateFakeReviewsHTML(p.id, avgRating);
+
+  $("#view").innerHTML = `
+    <section style="padding-bottom:20px; background: #fff;">
+      
+      <div class="scare-banner" style="background:#0F172A; border-bottom: 2px solid var(--accent);">
+        <i class="fa-solid fa-eye" style="color:var(--accent); font-size:20px; animation: blinkBorderScare 1.5s infinite;"></i>
+        <div class="scare-banner-text" style="color:#fff; font-size:12px;">38 people are looking at this right now! Stock is severely limited.</div>
+      </div>
+
+      ${sliderHTML}
+      
+      <div style="padding:20px 16px 0;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px;">
+           <h2 style="margin:0; font-family:Poppins; font-size:20px; line-height:1.4; font-weight:800;">${escapeHtml(p.name)}</h2>
+           <button class="icon-round ${likeClass}" id="product-like-btn" style="flex-shrink:0;"><i class="fa-solid fa-heart"></i></button>
+        </div>
+        
+        <div class="price-line" style="margin:16px 0 8px; align-items:baseline;">
+          <div class="shimmer-text" style="font-size:36px;">${money(p.price||0)}</div>
+          ${p.priceMrp ? `<div class="strike" style="font-size:18px;">MRP ${money(p.priceMrp)}</div>` : ""}
+        </div>
+        
+        <div class="free-delivery-badge" style="display:inline-flex; font-size:13px; padding: 6px 12px; margin-bottom: 16px;"><i class="fa-solid fa-truck-fast"></i> Free Delivery & No Shipping Charge</div>
+        
+        <div class="urgency-box">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <div>
+                <div style="font-weight:900;">Price increases in: <span id="prod-timer" style="font-size:18px;">14:59</span></div>
+                <div style="font-size:12px; margin-top:2px;">Due to high demand, we are forced to increase prices soon. Lock your price now!</div>
+            </div>
+        </div>
+        
+        <div style="font-weight:800; font-size:16px; margin:24px 0 8px; border-bottom:2px solid var(--bg); padding-bottom:8px;">Camera Features</div>
+        <div class="muted" style="font-size:14px; line-height:1.7; color:#334155; font-weight:500;">${formatDesc(p.description)}</div>
+        
+        <div style="margin:24px 0 10px; font-weight:800;">Select Quantity (Max 4)</div>
+        <div class="size-row" id="qty-row" style="display:flex;gap:10px">
+            ${[1, 2, 3, 4].map((q, i) => `<button class="size-btn ${i === 0 ? 'active' : ''}" data-qty="${q}">${q}</button>`).join("")}
+        </div>
+        
+        <div class="sticky-sheet" style="margin:30px -16px 0 -16px; display:flex; flex-direction:column; gap:10px;">
+            <div style="display:flex; gap:10px;">
+                <button class="btn btn-outline" id="add-to-cart" style="flex:1; padding:0;" title="Add to Cart"><i class="fa-solid fa-cart-plus" style="font-size:22px;"></i></button>
+                <button class="btn btn-pulse" id="direct-buy-btn" style="flex:4; font-size:18px; font-weight:900;">Buy Now <i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+            <div class="trust-badge-rzp" style="font-size:11px;">
+                <i class="fa-solid fa-money-bill-wave"></i> COD Available & <i class="fa-solid fa-shield-halved"></i> Secured Online Payments
+            </div>
+        </div>
+
+      </div>
+      
+      ${fakeReviewsHTML}
+      
+    </section>
+  `;
+
+  startTimer(900, "prod-timer");
+
+  let selectedQty = 1;
+  const qtyRow = $("#qty-row");
+  
+  if(qtyRow) {
+    qtyRow.querySelectorAll(".size-btn").forEach((b,i) => {
+      if(i===0) b.classList.add("active");
+      b.addEventListener("click", () => { 
+          qtyRow.querySelectorAll(".size-btn").forEach(x => x.classList.remove("active")); 
+          b.classList.add("active"); 
+          selectedQty = Number(b.dataset.qty); 
+      });
+    });
+  }
+
+  $("#product-like-btn").addEventListener("click", () => toggleFavorite(p.id, $("#product-like-btn")));
+  
+  $("#add-to-cart").addEventListener("click", () => { 
+      addToCart(p.id, "NA", selectedQty); 
+      toast("Added to cart successfully!"); 
+  });
+  
+  $("#direct-buy-btn").addEventListener("click", () => { 
+      sessionStorage.setItem("cctv_buy_qty", selectedQty); 
+      routeTo(`#/quick-buy/${p.id}`); 
+  });
+}
+
+function addToCart(pid, variant, qty) {
+  let item = CART.find(x => x.productId === pid);
+  if(item) item.qty += qty;
+  else CART.push({ productId: pid, variant: variant, qty: qty });
+  saveCart();
+}
+
+function changeQty(pid, diff) {
+  let item = CART.find(x => x.productId === pid);
+  if(item) {
+    item.qty += diff;
+    if(item.qty <= 0) CART = CART.filter(x => x.productId !== pid);
+    saveCart();
+    render();
+  }
+}
+
+function removeFromCart(pid) {
+  CART = CART.filter(x => x.productId !== pid);
+  saveCart();
+  render();
+}
+
+/* ===== QUICK BUY (GATHERS DETAILS AND REDIRECTS TO RAZORPAY OR COD) ===== */
+function QuickBuyView(id) {
+  const p = PRODUCTS.find(x=>x.id===id); 
+  if(!p){ routeTo("#/shop"); return; }
+
+  setTopbar("Secure Checkout", true); 
+  setActiveTab("");
+
+  const qty = parseInt(sessionStorage.getItem("cctv_buy_qty")) || 1;
+  const totalAmount = p.price * qty;
+
+  $("#view").innerHTML = `
+    <section style="padding:14px; background:var(--bg);">
+      <div style="background:#FFFBEB; border:1px solid #FDE68A; padding:12px; border-radius:12px; color:#D97706; font-size:13px; font-weight:700; margin-bottom:16px; display:flex; gap:10px; align-items:center; box-shadow: 0 2px 8px rgba(217, 119, 6, 0.15);">
+          <i class="fa-solid fa-lock" style="font-size:22px; color:#B45309;"></i>
+          <div>Stock is reserved for <span id="cart-timer" style="color:#B45309; font-weight:900; font-size:16px;">10:00</span> minutes. Please complete your order now!</div>
+      </div>
+
+      <div class="card pad" style="border-top: 4px solid #0F172A;">
+        <h3 style="margin:0 0 16px;font-family:Poppins; color:#0F172A; font-weight:800;">Where to deliver?</h3>
+        
+        <label>Full Name *</label>
+        <input id="qb-name" value="${PROFILE.name||''}" placeholder="Your Name" required>
+        
+        <label>Phone Number *</label>
+        <input id="qb-phone" type="tel" value="${PROFILE.phone||''}" placeholder="10-digit Mobile" required>
+        
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div><label>City *</label><input id="qb-city" value="${PROFILE.city||''}" placeholder="City" required></div>
+          <div><label>Pincode *</label><input id="qb-pincode" type="number" value="${PROFILE.pincode||''}" placeholder="6-digit PIN" required></div>
+        </div>
+        
+        <label>Complete Address *</label>
+        <textarea id="qb-address" placeholder="House/Flat No, Street, Landmark..." required>${PROFILE.address||''}</textarea>
+      </div>
+      
+      <div class="card sticky-sheet" style="margin-top:16px">
+        <div class="row" style="margin-bottom:8px; font-size:14px;">
+            <div class="muted">Item</div>
+            <div style="font-weight:700; color:#0F172A;">${escapeHtml(p.name)} (x${qty})</div>
+        </div>
+        <div class="row" style="margin-bottom:12px; font-size:14px;">
+            <div class="muted">Shipping Charge</div>
+            <div style="color:var(--success); font-weight:900;">FREE</div>
+        </div>
+        <div class="sep" style="margin:8px 0;"></div>
+        <div class="row" style="font-weight:900; font-size:22px;">
+            <div>Total Pay</div>
+            <div class="shimmer-text">${money(totalAmount)}</div>
+        </div>
+        
+        <div style="margin-top:16px;">
+            <div style="font-size:12px; color:var(--muted); font-weight:700; margin-bottom:8px; text-align:center;">Select Payment Method</div>
+            <div style="display:flex; gap:10px; flex-direction:column;">
+                <button class="btn btn-outline" id="proceed-cod" style="padding:14px; font-size:16px; width:100%;">
+                    <i class="fa-solid fa-money-bill-wave"></i> Cash on Delivery
+                </button>
+                <button class="btn btn-pulse" id="proceed-pay" style="padding:14px; font-size:16px; width:100%;">
+                    Proceed to Online Pay <i class="fa-solid fa-lock" style="margin-left:5px;"></i>
+                </button>
+            </div>
+        </div>
+      </div>
+    </section>
+  `;
+
+  startTimer(600, "cart-timer");
+
+  function validateForm() {
+    const name = $("#qb-name").value.trim(); 
+    const phone = $("#qb-phone").value.trim();
+    const city = $("#qb-city").value.trim(); 
+    const pincode = $("#qb-pincode").value.trim();
+    const address = $("#qb-address").value.trim();
+
+    if(!name || !phone || !city || !pincode || !address) { 
+        alert("Please fill all details correctly."); 
+        return null; 
+    }
+    
+    PROFILE.name = name; 
+    PROFILE.phone = phone; 
+    PROFILE.city = city; 
+    PROFILE.pincode = pincode; 
+    PROFILE.address = address; 
+    saveProfile();
+
+    return { name, phone, city, pincode, address };
+  }
+
+  // COD Handler
+  $("#proceed-cod").addEventListener("click", () => {
+      const customer = validateForm();
+      if(!customer) return;
+
+      const orderData = { 
+        orderId: "CCTV-" + Date.now().toString().slice(-8), 
+        items: [{ productId: p.id, name: p.name, price: p.price, qty: qty }], 
+        amount: totalAmount, 
+        customer: customer, 
+        isCart: false,
+        method: "COD"
+      };
+      
+      writeLocal("cctv_pending_redirect", orderData); 
+      routeTo("#/success-verified");
+  });
+
+  // Online Pay Handler
+  $("#proceed-pay").addEventListener("click", () => {
+    const customer = validateForm();
+    if(!customer) return;
+
+    if(!p.paymentLink || p.paymentLink.trim() === "") {
+        alert("Online payment is not configured for this product. Please use Cash on Delivery.");
+        return; 
+    }
+
+    const pendingOrder = { 
+        orderId: "CCTV-" + Date.now().toString().slice(-8), 
+        items: [{ productId: p.id, name: p.name, price: p.price, qty: qty }], 
+        amount: totalAmount, 
+        customer: customer, 
+        isCart: false,
+        method: "ONLINE"
+    };
+    
+    writeLocal("cctv_pending_redirect", pendingOrder); 
+    window.location.href = p.paymentLink; 
+  });
+}
+
+/* ===== SUCCESS VERIFIED VIEW ===== */
+function SuccessVerifiedView() {
+  setTopbar("Order Confirmed", false); 
+  setActiveTab("");
+  
+  const pend = readLocal("cctv_pending_redirect", null);
+
+  if (pend) {
+    localStorage.removeItem("cctv_pending_redirect");
+
+    const isDuplicate = ORDERS.some(o => o.orderId === pend.orderId);
+
+    if (!isDuplicate) {
+        const orderKey = db.ref('orders').push().key;
+        
+        let orderStatus = pend.method === "COD" ? "Pending - COD" : "PAID - Verified (Online)";
+        let orderPaymentMethod = pend.method === "COD" ? "Cash on Delivery" : "Razorpay Secure Link";
+
+        const finalOrder = {
+          ...pend,
+          firebaseKey: orderKey,
+          createdAt: Date.now(),
+          status: orderStatus,
+          paymentMethod: orderPaymentMethod,
+          trackingUrl: ""
+        };
+
+        db.ref('orders/' + orderKey).set(finalOrder).then(() => {
+          writeLocal("cctv_last_order", finalOrder);
+          if(pend.isCart) { CART = []; saveCart(); } 
+          renderSuccessUI(finalOrder);
+        }).catch(err => {
+          alert("Something went wrong saving the order. Please contact support.");
+        });
+    } else {
+        const existingOrder = ORDERS.find(o => o.orderId === pend.orderId);
+        renderSuccessUI(existingOrder);
+    }
+  } else {
+    const last = readLocal("cctv_last_order", null);
+    if (last) {
+      renderSuccessUI(last);
+    } else {
+      $("#view").innerHTML = `
+          <section style="padding:40px 20px; text-align:center;">
+              <h2 style="color:var(--primary); font-family:Poppins;">Order Status Verified</h2>
+              <p class="muted">No pending orders found or order already processed.</p>
+              <a href="#/shop" class="btn btn-outline" style="margin-top:20px;">Continue Shopping</a>
+          </section>`;
+    }
+  }
+}
+
+function renderSuccessUI(order) {
+  if(!order) return;
+  const isCOD = order.paymentMethod === "Cash on Delivery";
+  const titleMsg = isCOD ? "Order Placed Successfully!" : "Payment Verified!";
+
+  $("#view").innerHTML = `
+    <section class="success-wrap">
+      <div class="check-anim"><i class="fa-solid fa-check"></i></div>
+      <div class="confetti" id="confetti"></div>
+      
+      <h2 style="font-family:Poppins;margin:16px 0 8px; color:#10B981; text-align:center; font-weight:900;">${titleMsg}</h2>
+      <div class="muted" style="text-align:center; line-height:1.5; font-size:15px; font-weight:600;">Thank you, <b style="color:#0F172A;">${escapeHtml(order.customer?.name || "Customer")}</b>. Your order <b style="color:#0F172A;">#${escapeHtml(order.orderId)}</b> is confirmed.</div>
+      
+      <div class="card pad" style="background:#ECFDF5; border-color:#6EE7B7; margin-top:24px; width:100%; text-align:center; box-shadow:0 4px 15px rgba(16,185,129,0.2);">
+        <div style="font-weight:900; color:#047857; font-size:24px;">Amount: ${money(order.amount)}</div>
+        <div style="font-size:14px; color:#065F46; margin-top:8px; font-weight:700;"><i class="fa-solid fa-truck-fast"></i> Free Delivery is applied. Dispatched in 24 hours.</div>
+        ${isCOD ? `<div style="font-size:13px; color:#B45309; margin-top:8px; font-weight:800; background:#FFFBEB; padding:8px; border-radius:6px;"><i class="fa-solid fa-wallet"></i> Please keep exact cash ready at delivery.</div>` : ''}
+      </div>
+      
+      <div style="margin-top:30px;display:flex;gap:12px;flex-direction:column;width:100%;max-width:480px">
+        <a class="btn btn-block" href="#/account/orders" style="padding:16px; font-size:16px; background:#0F172A; color:#fff;"><i class="fa-solid fa-box"></i> Track Your Order</a>
+        <a class="btn btn-outline btn-block" href="#/shop" style="padding:16px; color:#0F172A; border-color:#0F172A;">Continue Shopping</a>
+      </div>
+    </section>
+  `;
+  popConfetti();
+}
+
+function popConfetti(){
+  const c = $("#confetti"); if(!c) return;
+  c.innerHTML = ""; const colors = ["#0F172A","#EAB308","#10B981","#38BDF8","#3B82F6"];
+  for(let i=0;i<50;i++){
+    const s = document.createElement("span");
+    s.style.left = (4 + Math.random()*92) + "%";
+    s.style.background = colors[Math.floor(Math.random()*colors.length)];
+    s.style.animationDelay = (Math.random()*0.6) + "s";
+    c.appendChild(s);
+  }
+}
+
+/* ===== TERMS AND PRIVACY VIEWS ===== */
+function TermsView() {
+  setTopbar("Terms & Conditions", true); setActiveTab("");
+  $("#view").innerHTML = `
+    <section style="padding:16px;">
+      <div class="card pad">
+        <h3 style="margin-top:0; color:var(--primary); font-family:Poppins;">Terms of Service</h3>
+        <p class="muted" style="font-size:14px; line-height:1.6; font-weight:500;">
+          Welcome to SecureCam.<br><br>
+          1. <b>Sourcing:</b> All products are sourced and delivered via our trusted logistics partners.<br><br>
+          2. <b>Agreements:</b> By placing an order, you agree to purchase the item and accept these terms.<br><br>
+          3. <b>Cancellation:</b> Orders once placed and processed cannot be cancelled unless approved by the support team.<br><br>
+          4. <b>Changes:</b> Prices and availability are subject to change without prior notice.
+        </p>
+      </div>
+    </section>`;
+}
+
+function PrivacyView() {
+  setTopbar("Privacy Policy", true); setActiveTab("");
+  $("#view").innerHTML = `
+    <section style="padding:16px;">
+      <div class="card pad">
+        <h3 style="margin-top:0; color:var(--primary); font-family:Poppins;">Privacy Policy</h3>
+        <p class="muted" style="font-size:14px; line-height:1.6; font-weight:500;">
+          We respect your privacy.<br><br>
+          <b>Data Collection:</b> Your address, phone number, and contact details are collected strictly for delivery fulfillment purposes.<br><br>
+          <b>Data Security:</b> We do not store any sensitive payment information on our servers. Online payments are handled securely by gateway.<br><br>
+          <b>Third Parties:</b> We do not share your information with unauthorized third parties. We share delivery details only with courier partners.
+        </p>
+      </div>
+    </section>`;
+}
+
+/* ===== CART ===== */
+function CartView(){
+  setTopbar("Shopping Cart", true); setActiveTab("cart"); const total = cartTotal();
+  
+  if (CART.length === 0 || total <= 0) {
+      $("#view").innerHTML = `
+        <section style="padding:14px; background:var(--bg); height: 100%;">
+          <div class="card pad" style="text-align:center;padding:60px 20px;">
+              <i class="fa-solid fa-cart-shopping" style="font-size:50px; color:#E2E8F0; margin-bottom:16px;"></i>
+              <h2 style="font-family:Poppins; color:#0F172A; margin: 16px 0 8px;">Your cart is empty!</h2>
+              <div class="muted" style="font-size:14px; margin-bottom:24px; font-weight:600;">Secure your home with the best cameras.</div>
+              <a class="btn btn-pulse" href="#/shop" style="padding:16px 24px; width:100%; max-width: 300px; margin: 0 auto; display:inline-block;"><i class="fa-solid fa-magnifying-glass"></i> Browse Deals Now</a>
+          </div>
+        </section>
+      `;
+      return;
+  }
+
+  $("#view").innerHTML = `
+    <section style="padding:14px; background:var(--bg);">
+      <div class="scare-banner" style="background:#0F172A; margin-bottom:12px; border-radius:8px;">
+        <i class="fa-solid fa-bell" style="color:#EAB308; font-size:20px; animation: shakeIcon 0.5s infinite;"></i>
+        <div class="scare-banner-text" style="color:#fff; font-size:12px;">High Demand: Cart items are not reserved. Please complete checkout immediately.</div>
+      </div>
+
+      <div class="cart-list" id="cart-list">${CART.map(row => CartItem(row)).join("")}</div>
+      <div class="card sticky-sheet" style="margin-top:16px">
+      <div class="row" style="margin-bottom:8px;"><div class="muted" style="font-weight:600;">Subtotal</div><div style="font-weight:800;">${money(total)}</div></div>
+        <div class="row" style="margin-bottom:8px;"><div class="muted" style="font-weight:600;">Shipping Charge</div><div style="color:var(--success); font-weight:900;">FREE</div></div>
+        <div class="sep"></div>
+        <div class="row" style="font-weight:900; font-size:22px;"><div>Total</div><div class="shimmer-text">${money(total)}</div></div>
+        <button class="btn btn-block btn-pulse" id="to-checkout" style="padding:16px; margin-top:16px; font-size:18px;">Secure Checkout <i class="fa-solid fa-lock"></i></button>
+      </div>
+    </section>
+  `;
+  attachCartHandlers();
+  $("#to-checkout")?.addEventListener("click", ()=>{ if (ensureProfileBefore("#/checkout")) routeTo("#/checkout"); });
+}
+
+function CartItem(it){
+  const p = PRODUCTS.find(x=>x.id===it.productId); if(!p) return "";
+  return `
+    <div class="cart-item" data-id="${it.productId}">
+      <img src="${(p.imageUrls[0]||"")}">
+      <div>
+        <div style="font-weight:800; color:var(--primary); line-height:1.2;">${escapeHtml(p.name)}</div>
+        <div class="price-line" style="margin-top:6px"><div style="font-weight:900; font-size:18px; color:#0F172A;">${money((p.price||0) * it.qty)}</div></div>
+        <div class="qty">
+          <button class="circle-btn" data-dec>-</button><div style="font-weight:700; width:16px; text-align:center;">${it.qty}</div><button class="circle-btn primary" data-inc>+</button>
+          <button class="circle-btn" data-rem style="margin-left:auto; color:#EF4444; border-color:#FEE2E2; background:#FEF2F2;"><i class="fa-regular fa-trash-can"></i></button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function attachCartHandlers(){
+  $$("#cart-list .cart-item").forEach(item=>{
+    const pid = item.dataset.id;
+    item.querySelector("[data-inc]").addEventListener("click", ()=> changeQty(pid, +1));
+    item.querySelector("[data-dec]").addEventListener("click", ()=> changeQty(pid, -1));
+    item.querySelector("[data-rem]").addEventListener("click", ()=> removeFromCart(pid));
+  });
+}
+
+function CheckoutView(){
+  if (CART.length === 0 || cartTotal() <= 0){ routeTo("#/cart"); return; }
+  
+  setTopbar("Checkout", true); setActiveTab(""); const total = cartTotal();
+  $("#view").innerHTML = `
+    <section style="padding:14px; background:var(--bg);">
+      <div class="urgency-box" style="margin-top:0;"><i class="fa-solid fa-bolt"></i> Cameras are selling out fast! Complete your order immediately to lock your items.</div>
+      <div class="card pad" style="border-top: 4px solid var(--primary);">
+        <h3 style="margin:0 0 16px;font-family:Poppins; color:#0F172A; font-weight:800;">Delivery Details</h3>
+        <label>Full Name</label><input id="ch-name" required value="${PROFILE.name||''}">
+        <label>Phone *</label><input id="ch-phone" type="tel" required value="${PROFILE.phone||''}">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+          <div><label>City *</label><input id="ch-city" required value="${PROFILE.city||''}"></div>
+          <div><label>Pincode *</label><input id="ch-pincode" type="number" required value="${PROFILE.pincode||''}"></div>
+        </div>
+        <label>Complete Address *</label><textarea id="ch-address" required>${PROFILE.address||''}</textarea>
+      </div>
+      <div class="card sticky-sheet" style="margin-top:16px">
+        <div class="row" style="margin-bottom:8px; font-size:14px;">
+            <div class="muted" style="font-weight:600;">Shipping Charge</div>
+            <div style="color:var(--success); font-weight:900;">FREE</div>
+        </div>
+        <div class="row" style="font-weight:900; font-size:22px;"><div>Total Payable</div><div class="shimmer-text">${money(total)}</div></div>
+        
+        <div style="margin-top:16px;">
+            <div style="font-size:12px; color:var(--muted); font-weight:700; margin-bottom:8px; text-align:center;">Select Payment Method</div>
+            <div style="display:flex; gap:10px; flex-direction:column;">
+                <button class="btn btn-outline" id="pay-cod-next" style="padding:14px; font-size:16px;">
+                    <i class="fa-solid fa-money-bill-wave"></i> Cash on Delivery
+                </button>
+                <button class="btn btn-block btn-pulse" id="pay-online-next" style="padding:14px; font-size:16px;">
+                    Proceed to Online Pay <i class="fa-solid fa-lock" style="margin-left:5px;"></i>
+                </button>
+            </div>
+        </div>
+      </div>
+    </section>
+  `;
+  
+  function validateCheckout() {
+    const n = $("#ch-name").value.trim(), p = $("#ch-phone").value.trim(), a = $("#ch-address").value.trim(), c = $("#ch-city").value.trim(), pc = $("#ch-pincode").value.trim();
+    if(!n || !p || !a || !c || !pc){ alert("Please fill all details."); return null; }
+    PROFILE.name = n; PROFILE.phone = p; PROFILE.address = a; PROFILE.city = c; PROFILE.pincode = pc; PROFILE.isComplete = true; saveProfile();
+    return { name: n, phone: p, address: a, city: c, pincode: pc };
+  }
+
+  // COD logic for full Cart
+  $("#pay-cod-next").addEventListener("click", () => {
+    const customer = validateCheckout();
+    if(!customer) return;
+
+    const items = CART.map(it => { const prod = PRODUCTS.find(x=>x.id===it.productId); return { productId: it.productId, name: prod?.name, price: prod?.price, qty: it.qty }; });
+    writeLocal("cctv_pending_redirect", { orderId: "CCTV-" + Date.now().toString().slice(-8), items, customer: customer, amount: cartTotal(), isCart: true, method: "COD" });
+    
+    routeTo("#/success-verified");
+  });
+
+  // Online Pay logic for full Cart
+  $("#pay-online-next").addEventListener("click", ()=>{
+    const customer = validateCheckout();
+    if(!customer) return;
+    
+    const firstProduct = PRODUCTS.find(x=>x.id===CART[0].productId);
+    if(!firstProduct || !firstProduct.paymentLink) { alert("Admin has not configured payment link for items in cart. Please use COD."); return; }
+
+    const items = CART.map(it => { const prod = PRODUCTS.find(x=>x.id===it.productId); return { productId: it.productId, name: prod?.name, price: prod?.price, qty: it.qty }; });
+    writeLocal("cctv_pending_redirect", { orderId: "CCTV-" + Date.now().toString().slice(-8), items, customer: customer, amount: cartTotal(), isCart: true, method: "ONLINE" });
+    
+    let link = firstProduct.paymentLink.trim();
+    if (!link.startsWith("http://") && !link.startsWith("https://")) { link = "https://" + link; }
+    window.location.assign(link);
+  });
+}
+
+/* ===== Account & Orders (WITH AI ADVISOR INTEGRATION) ===== */
+function AccountView(){
+  setTopbar("Profile", false); setActiveTab("account");
+  $("#view").innerHTML = `
+    <section style="padding:14px; background:var(--bg);">
+      <div class="card pad" style="background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%); color:#fff; border:none; border-radius:20px; box-shadow:0 10px 25px rgba(0,0,0,0.15);">
+        <div style="display:flex;align-items:center;gap:16px">
+          <div class="avatar" style="border-color:rgba(255,255,255,0.1);"><img src="${PROFILE.avatar || 'https://i.pravatar.cc/200?u=insta'}"></div>
+          <div><div style="font-weight:800;font-size:22px">${escapeHtml(PROFILE.name || 'Guest User')}</div><div style="color:rgba(255,255,255,0.7); font-size:14px; font-weight:600;">${escapeHtml(PROFILE.phone || 'Complete your profile')}</div></div>
+        </div>
+      </div>
+      
+      <button class="ai-recipe-btn" onclick="routeTo('#/ai-advisor')">
+          <i class="fa-solid fa-wand-magic-sparkles"></i> AI Security Advisor ✨
+      </button>
+
+      <div class="card pad" style="margin-top:16px; border-radius:20px;">
+        <a href="#/profile" class="row" style="padding:14px 0; font-weight:700; color:#0F172A;"><div><i class="fa-regular fa-user" style="color:var(--primary); width:28px; font-size:18px;"></i> Edit Profile</div><i class="fa-solid fa-chevron-right" style="color:var(--muted); font-size:14px;"></i></a>
+        <div class="sep" style="margin:0;"></div>
+        <a href="#/account/orders" class="row" style="padding:14px 0; font-weight:700; color:#0F172A;"><div><i class="fa-solid fa-box" style="color:var(--primary); width:28px; font-size:18px;"></i> My Orders</div><i class="fa-solid fa-chevron-right" style="color:var(--muted); font-size:14px;"></i></a>
+        <div class="sep" style="margin:0;"></div>
+        <a href="#/favorites" class="row" style="padding:14px 0; font-weight:700; color:#0F172A;"><div><i class="fa-regular fa-heart" style="color:var(--primary); width:28px; font-size:18px;"></i> Saved Deals</div><i class="fa-solid fa-chevron-right" style="color:var(--muted); font-size:14px;"></i></a>
+      </div>
+      
+      <div class="card pad" style="margin-top:16px; text-align:center; border-radius:20px; cursor:pointer; background:#ECFDF5; border-color:#6EE7B7;" onclick="$('#chatbot-toggle').click()">
+        <div style="font-weight:800; color:#047857; font-size:16px;"><i class="fa-solid fa-headset"></i> Need Help? Chat with AI</div>
+      </div>
+    </section>
+  `;
+}
+
+/* ===== NEW AI ADVISOR VIEW ===== */
+function AiAdvisorView() {
+    setTopbar("AI Advisor ✨", true); setActiveTab("");
+    $("#view").innerHTML = `
+        <section style="padding:16px; background:var(--bg); min-height:100vh;">
+            <div class="card pad">
+                <h3 style="margin:0 0 8px; color:var(--primary);"><i class="fa-solid fa-shield-halved"></i> Where to install cameras?</h3>
+                <p class="muted" style="font-size:13px; margin-bottom:16px;">Apne ghar ya shop ki details yaha likhein. Hamara AI aapko batayega ki best security ke liye cameras kahan install karne chahiye!</p>
+                
+                <textarea id="advisor-details" placeholder="E.g., 2 floor ka ghar hai, ek main gate aur ek backyard hai..." style="min-height: 80px;"></textarea>
+                
+                <button class="btn btn-block" id="generate-advisor-btn" style="margin-top:16px; background: linear-gradient(135deg, #1E3A8A, #3B82F6);">Get Expert Advice ✨</button>
+            </div>
+            
+            <div id="advisor-result" class="recipe-result-box"></div>
+        </section>
+    `;
+
+    $("#generate-advisor-btn").addEventListener("click", async () => {
+        const details = $("#advisor-details").value.trim();
+        if(!details) {
+            toast("Details daaliye pehle!");
+            return;
+        }
+
+        const btn = $("#generate-advisor-btn");
+        const resultBox = $("#advisor-result");
+        
+        btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Analyzing...`;
+        btn.disabled = true;
+        resultBox.style.display = "block";
+        resultBox.innerHTML = "<div style='text-align:center; color:var(--muted);'><i class='fa-solid fa-wand-magic-sparkles fa-bounce'></i> Soch raha hu best setup...</div>";
+
+        const systemPrompt = "You are a smart security advisor for SecureCam. Give 3 quick points on where the user should install their CCTV cameras based on their property details. You must explicitly mention how easy it is to install SecureCam cameras. Keep the response formatting clean with bullet points. Respond in Hinglish (Hindi written in English alphabet). Add emojis.";
+        const userPrompt = `My property: ${details}. Give me a quick security setup advice.`;
+
+        const response = await fetchGeminiAPI(userPrompt, systemPrompt);
+        
+        resultBox.innerHTML = parseGeminiMarkdown(response);
+        btn.innerHTML = `Get Another Advice ✨`;
+        btn.disabled = false;
+    });
+}
+
+
+function ProfileEditView(isSetup=false){
+  setTopbar(isSetup ? "Setup Profile" : "Edit Profile", true); setActiveTab("");
+  $("#view").innerHTML = `
+    <section style="padding:14px">
+      <div class="profile-head">
+          <div class="avatar"><img id="avatar-img" src="${PROFILE.avatar || 'https://i.pravatar.cc/200?u=insta'}"></div>
+          <label class="chip" style="cursor:pointer; margin-top:8px;">Change Photo <input type="file" id="avatar-file" accept="image/*" style="display:none"></label>
+      </div>
+      <div class="card pad">
+        <label>Full Name</label><input id="pfv-name" value="${escapeHtml(PROFILE.name||'')}">
+        <label>Phone Number</label><input id="pfv-phone" type="tel" value="${escapeHtml(PROFILE.phone||'')}">
+        <div class="row" style="gap:10px;"><div style="flex:1"><label>Pin Code</label><input id="pfv-pincode" value="${escapeHtml(PROFILE.pincode||'')}"></div><div style="flex:1"><label>City</label><input id="pfv-city" value="${escapeHtml(PROFILE.city||'')}"></div></div>
+        <label style="margin-top:10px">Complete Address</label><textarea id="pfv-address">${escapeHtml(PROFILE.address||'')}</textarea>
+        <button class="btn btn-block" id="pfv-save" style="padding:16px; margin-top:24px; background:var(--primary); color:#fff;">${isSetup?'Save & Continue':'Save Changes'}</button>
+      </div>
+    </section>
+  `;
+  $("#avatar-file").addEventListener("change", async (e)=>{ const f = e.target.files?.[0]; if(!f) return; const url = await compressToDataURL(f, 400, 400, 0.9); PROFILE.avatar = url; saveProfile(); $("#avatar-img").src = url; });
+  $("#pfv-save").addEventListener("click", ()=>{
+    PROFILE.name = $("#pfv-name").value.trim(); PROFILE.phone = $("#pfv-phone").value.trim(); PROFILE.pincode = $("#pfv-pincode").value.trim(); PROFILE.city = $("#pfv-city").value.trim(); PROFILE.address = $("#pfv-address").value.trim(); PROFILE.isComplete = hasCompleteProfile(); saveProfile();
+    const next = readLocal("cctv_next", null); localStorage.removeItem("cctv_next"); toast("Profile saved");
+    if (isSetup && next){ routeTo(next); } else { routeTo("#/account"); }
+  });
+}
+
+function FavoritesView() {
+  setTopbar("Saved Deals", true); setActiveTab(""); const favs = PRODUCTS.filter(p => PROFILE.favorites.includes(p.id));
+  $("#view").innerHTML = `<section style="padding:14px; background:var(--bg);">${favs.length === 0 ? `<div class="card pad" style="text-align:center;padding:60px 20px;"><i class="fa-regular fa-heart" style="font-size:50px; color:var(--line); margin-bottom:16px;"></i><div class="muted" style="font-weight:600;">No saved items yet.</div></div>` : `<div class="grid" id="favorites-grid">${favs.map(p => ProductCard(p)).join("")}</div>`}</section>`;
+  attachProductCardHandlers($("#favorites-grid"));
+}
+
+function OrdersListView(){
+  setTopbar("My Orders", true); setActiveTab(""); const rows = [...ORDERS].sort((a,b)=> b.createdAt - a.createdAt);
+  $("#view").innerHTML = `
+    <section style="padding:14px; background:var(--bg);">
+      ${rows.length===0 ? `<div class="card pad" style="text-align:center; padding:60px 20px;"><div class="muted" style="font-weight:600;">No orders placed yet.</div></div>` : rows.map(o => `
+        <a class="card pad" style="display:block;margin-bottom:16px; border-left: 4px solid #0F172A;" href="#/account/orders/${o.orderId}">
+          <div class="row"><strong style="color:#0F172A; font-size:16px;">#${escapeHtml(o.orderId)}</strong><span class="muted" style="font-size:12px; font-weight:600;">${new Date(o.createdAt).toLocaleDateString()}</span></div>
+          <div class="row" style="margin-top:10px;"><div class="muted" style="font-size:14px; font-weight:500;">${escapeHtml((o.items || [{name: o.productName}]).map(i=>i.name).join(", "))}</div><div style="font-weight:900; font-size:16px;">${money(o.amount)}</div></div>
+          <div class="chip" style="margin-top:12px; font-size:12px; background:#EFF6FF; border:none; color:var(--primary);"><i class="fa-solid fa-info-circle"></i> ${escapeHtml(o.status)}</div>
+        </a>
+      `).join("")}
+    </section>
+  `;
+}
+
+function OrderDetailView(orderId){
+  const o = ORDERS.find(x=>x.orderId===orderId); if(!o){ OrdersListView(); return; } setTopbar("Order Status", true); setActiveTab("");
+  const itemsHTML = o.items ? o.items.map(it=>`<div class="row" style="margin-bottom:8px;"><div>${escapeHtml(it.name)} <span class="muted" style="font-size:13px;">x${it.qty||1}</span></div><div style="font-weight:800;">${money(it.price*(it.qty||1))}</div></div>`).join("") : `<div class="row" style="margin-bottom:8px;"><div>${escapeHtml(o.productName)} <span class="muted" style="font-size:13px;">x1</span></div><div style="font-weight:800;">${money(o.amount)}</div></div>`;
+  $("#view").innerHTML = `
+    <section style="padding:14px">
+      <div class="card pad" style="border-radius:20px;">
+        <div style="text-align:center; padding-bottom:16px; border-bottom:1px solid var(--line);">
+           <div style="font-size:13px; color:var(--muted); margin-bottom:4px; font-weight:600;">Order ID</div>
+           <div style="font-weight:900; font-size:22px; color:#0F172A;">#${escapeHtml(o.orderId)}</div>
+           <div class="chip" style="margin-top:10px; font-size:13px; background:#FEFCE8; border-color:#FEF08A; color:#A16207;"><i class="fa-solid fa-clock"></i> ${escapeHtml(o.status)}</div>
+        </div>
+        <div style="padding:16px 0;">
+            <h4 style="margin:0 0 10px; font-family:Poppins; font-weight:800;">Order Summary</h4>
+            ${itemsHTML}
+            <div class="row" style="margin-top:12px; font-size:14px;"><div class="muted" style="font-weight:600;">Shipping</div><div style="color:var(--success); font-weight:800;">FREE</div></div>
+        </div>
+        <div style="padding-top:16px; border-top:1px solid var(--line);">
+            <div class="row" style="font-size:20px;"><strong style="font-weight:900;">Total Paid</strong><strong style="color:var(--success); font-weight:900;">${money(o.amount)}</strong></div>
+            <div class="muted" style="font-size:13px; margin-top:4px; font-weight:600;">Via ${escapeHtml(o.paymentMethod || "Online Secure Payment")}</div>
+        </div>
+        ${o.trackingUrl ? `<a href="${escapeHtml(o.trackingUrl)}" target="_blank" class="btn btn-block" style="margin-top:20px;"><i class="fa-solid fa-truck-fast"></i> Track Live Shipment</a>` : ''}
+      </div>
+    </section>
+  `;
+}
+
+function toggleFavorite(productId, btn) {
+  if (PROFILE.favorites.includes(productId)) { PROFILE.favorites = PROFILE.favorites.filter(id => id !== productId); btn?.classList.remove('liked'); toast("Removed from saved."); } 
+  else { PROFILE.favorites.push(productId); btn?.classList.add('liked'); toast("Deal Saved!"); }
+  saveProfile();
+}
+
+/* ===== Admin & Logic ===== */
+let IS_ADMIN_AUTHED = sessionStorage.getItem("cctv_admin_authed") === "1";
+
+function isAdminRoute(){ return location.hash.replace(/^#/, "").startsWith("/admin"); }
+function adminGo(title, showBack=true){ $("#admin-title").textContent = title; $("#admin-back").style.display = showBack ? "inline-grid" : "none"; }
+function showAdmin(id){ $$("#admin-app > .admin-wrap > div").forEach(el => el.style.display="none"); $("#"+id).style.display = "block"; }
+
+function setAdminView(){
+  if (!IS_ADMIN_AUTHED){ showAdmin("admin-login"); adminGo("Admin Login", false); return; }
+  const sub = parseRoute().parts[1] || "dashboard";
+  if (sub==="dashboard"){ showAdmin("admin-dashboard"); adminGo("Dashboard", false); }
+  else if (sub==="banners"){ showAdmin("admin-banners"); adminGo("Store Settings"); renderAdminBanners(); }
+  else if (sub==="add"){ showAdmin("admin-add"); adminGo("Add Camera"); }
+  else if (sub==="manage"){ showAdmin("admin-manage"); adminGo("Inventory Table"); renderManageTable(); }
+  else if (sub==="manage-cards"){ showAdmin("admin-manage-cards"); adminGo("Inventory"); renderManageCards(); }
+  else if (sub==="orders"){ showAdmin("admin-orders"); adminGo("Orders"); renderOrdersAdmin(); }
+  else if (sub==="customers"){ showAdmin("admin-customers"); adminGo("Customers"); renderCustomersAdmin(); }
+  else { showAdmin("admin-dashboard"); adminGo("Dashboard", false); }
+}
+
+// Updated Login with Firebase Auth
+$("#admin-login-form")?.addEventListener("submit", (e)=>{ 
+    e.preventDefault(); 
+    const email = $("#adm-id").value.trim();
+    const pwd = $("#adm-pw").value.trim();
+    
+    firebase.auth().signInWithEmailAndPassword(email, pwd)
+    .then((userCredential) => {
+        IS_ADMIN_AUTHED = true; 
+        sessionStorage.setItem("cctv_admin_authed","1"); 
+        routeTo("#/admin/dashboard");
+    })
+    .catch((error) => {
+        alert("Login failed: " + error.message);
+    });
+});
+
+$("#admin-logout")?.addEventListener("click", ()=>{ IS_ADMIN_AUTHED = false; sessionStorage.removeItem("cctv_admin_authed"); firebase.auth().signOut(); routeTo("#/admin"); });
+
+function renderAdminBanners() {
+  $("#banner-text").value = BANNER_TEXT; 
+  $("#hero-thumbs").innerHTML = HERO_IMAGE_URL ? `<div class="thumb-wrap"><img class="thumb" src="${HERO_IMAGE_URL}"></div>` : "";
+}
+
+$("#banner-form")?.addEventListener("submit", (e) => { e.preventDefault(); db.ref('config/bannerText').set($("#banner-text").value.trim()).then(() => toast("Saved.")); });
+$("#hero-form")?.addEventListener("submit", async (e) => { e.preventDefault(); const file = $("#hero-upload").files[0]; if (!file) return; db.ref('config/heroImage').set(await compressToDataURL(file, 1200, 1200, 0.85)).then(() => toast("Saved.")); });
+
+/* ===== MULTIPLE IMAGE UPLOAD & DELETE LOGIC ===== */
+let pendingUploads = []; 
+
+$("#pf-upload")?.addEventListener("change", async (e)=>{ 
+    const files = Array.from(e.target.files||[]); 
+    if (!files.length) return; 
+    
+    $("#pf-save").disabled = true; 
+    $("#pf-save").textContent = "Processing..."; 
+    
+    for (const f of files) {
+        pendingUploads.push(await compressToDataURL(f, 1200, 1200, 0.85)); 
+    }
+    
+    renderThumbs(); 
+    $("#pf-save").disabled = false; 
+    $("#pf-save").textContent = "Save Product"; 
+});
+
+window.removeUpload = (index) => {
+    pendingUploads.splice(index, 1);
+    renderThumbs();
+};
+
+function renderThumbs() { 
+    const t = $("#pf-thumbs"); 
+    if(t) {
+        t.innerHTML = pendingUploads.map((u, i) => `
+            <div class="thumb-wrap">
+                <img class="thumb" src="${u}">
+                <button type="button" class="thumb-del" onclick="removeUpload(${i})">X</button>
+            </div>
+        `).join(""); 
+    }
+}
+
+async function compressToDataURL(file, maxW, maxH, quality){ 
+    const img = await fileToImage(file); 
+    const [w,h] = [Math.round(img.naturalWidth*Math.min(maxW/img.naturalWidth, maxH/img.naturalHeight, 1)), Math.round(img.naturalHeight*Math.min(maxW/img.naturalWidth, maxH/img.naturalHeight, 1))]; 
+    const canvas = document.createElement("canvas"); canvas.width = w; canvas.height = h; canvas.getContext("2d").drawImage(img,0,0,w,h); 
+    return canvas.toDataURL("image/jpeg", quality); 
+}
+
+function fileToImage(file){ return new Promise((res,rej)=>{ const fr=new FileReader(); fr.onload=()=>{ const img=new Image(); img.onload=()=>res(img); img.src=fr.result; }; fr.readAsDataURL(file); }); }
+
+$("#pf-reset")?.addEventListener("click", ()=>{ 
+    $("#pf-id").value=""; $("#pf-name").value=""; $("#pf-desc").value=""; $("#pf-category").value=""; $("#pf-price").value=""; $("#pf-mrp").value=""; $("#pf-disc").value=""; $("#pf-paylink").value=""; $("#pf-upload").value=""; pendingUploads=[]; renderThumbs(); 
+});
+
+$("#pf-save")?.addEventListener("click", ()=>{
+  const id = $("#pf-id").value; const name = $("#pf-name").value.trim(); const description = $("#pf-desc").value.trim(); const category = $("#pf-category").value.trim(); const paymentLink = $("#pf-paylink").value.trim();
+  let priceMrp = Number($("#pf-mrp").value||0), discountPercent = Number($("#pf-disc").value||0), price = Number($("#pf-price").value||0);
+  
+  if (!price && priceMrp && discountPercent) price = Math.round(priceMrp*(100-discountPercent)/100); 
+  if (!priceMrp && price && discountPercent) priceMrp = Math.round(price*100/(100-discountPercent)); 
+  if (!discountPercent && priceMrp && price) discountPercent = Math.max(0, Math.min(99, Math.round((priceMrp-price)/priceMrp*100)));
+  
+  if(!name || !price || !category){ alert("Fill required fields."); return; }
+  
+  const data = { name, description, category, priceMrp, discountPercent, price, paymentLink, imageUrls: pendingUploads.slice(), createdAt: Date.now() };
+  
+  if (id) { 
+      const k = PRODUCTS.find(p => p.id === id)?.firebaseKey; 
+      if (k) db.ref('products/' + k).update(data).then(() => toast("Updated.")); 
+  } else { 
+      const k = db.ref('products').push().key; 
+      db.ref('products/' + k).set({ ...data, id: uid(), firebaseKey: k }).then(() => toast("Added.")); 
+  }
+  $("#pf-reset").click(); routeTo('#/admin/manage-cards');
+});
+
+function renderManageCards(){
+  const list = $("#mpc-list");
+  list.innerHTML = PRODUCTS.map(p=>`
+    <div class="card pad" style="display:flex;align-items:center;gap:12px">
+      <img src="${(p.imageUrls[0]||"")}" style="width:64px;height:64px;object-fit:cover;border-radius:8px;border:1px solid var(--line)">
+      <div style="flex:1">
+          <div style="font-weight:700">${escapeHtml(p.name)}</div>
+          <div class="price-line" style="margin-top:4px;"><div style="font-weight:700; color:var(--primary);">${money(p.price||0)}</div></div>
+          ${p.paymentLink ? `<div style="font-size:11px; color:var(--success); margin-top:2px;">Link Active</div>` : `<div style="font-size:11px; color:var(--accent); margin-top:2px;">COD Only</div>`}
+      </div>
+      <button class="icon-round" data-edit="${p.id}"><i class="fa-solid fa-pen"></i></button>
+      <button class="icon-round" data-del="${p.id}" style="color:#ef4444"><i class="fa-solid fa-trash"></i></button>
+    </div>
+  `).join("");
+  list.querySelectorAll("[data-edit]").forEach(b=> b.onclick = ()=> loadToAddForm(b.dataset.edit)); 
+  list.querySelectorAll("[data-del]").forEach(b=> b.onclick = ()=> delProduct(b.dataset.del));
+}
+
+function loadToAddForm(id){ 
+    const p = PRODUCTS.find(x=>x.id===id); if(!p) return; routeTo("#/admin/add"); 
+    setTimeout(()=>{ 
+        $("#pf-id").value = p.id; $("#pf-name").value = p.name; $("#pf-desc").value = p.description||""; $("#pf-category").value = p.category||""; $("#pf-mrp").value = p.priceMrp||""; $("#pf-disc").value = p.discountPercent||""; $("#pf-price").value = p.price||""; $("#pf-paylink").value = p.paymentLink||""; 
+        
+        pendingUploads = p.imageUrls ? [...p.imageUrls] : []; 
+        renderThumbs(); 
+        
+        window.scrollTo(0,0); 
+    }, 0); 
+}
+
+function delProduct(id){ const p = PRODUCTS.find(x => x.id === id); if (p && p.firebaseKey && confirm("Delete?")) { db.ref('products/' + p.firebaseKey).remove().then(() => toast("Deleted.")); } }
+
+function renderOrdersAdmin() {
+  const el = $("#orders-admin"); const rows = [...ORDERS].sort((a,b)=> b.createdAt - a.createdAt);
+  el.innerHTML = rows.length===0 ? `<div class="muted">No orders yet.</div>` : `
+    <table class="table">
+        <thead><tr><th>Order</th><th>Total</th><th>Status</th><th>Track URL</th><th>Action</th></tr></thead>
+        <tbody>
+            ${rows.map(o=>`
+            <tr data-key="${o.firebaseKey}">
+                <td><b>#${escapeHtml(o.orderId)}</b><br><small>${new Date(o.createdAt).toLocaleString()}</small><br><small style="color:var(--primary)">${o.customer.phone}</small><br><small style="color:var(--accent)">${o.paymentMethod}</small></td>
+                <td><b>${money(o.amount)}</b></td>
+                <td><select class="adm-status" style="padding:6px;">${["Pending - COD", "PAID - Verified (Online)","Dispatched","Delivered","Cancelled"].map(s=>`<option ${o.status===s?"selected":""}>${s}</option>`).join("")}</select></td>
+                <td><input class="adm-track" value="${escapeHtml(o.trackingUrl||"")}" style="padding:6px;width:100px;"></td>
+                <td><button class="btn btn-outline adm-save" style="padding:6px;">Save</button></td>
+            </tr>`).join("")}
+        </tbody>
+    </table>`;
+  el.querySelectorAll(".adm-save").forEach(btn=> btn.addEventListener("click", ()=>{ const row = btn.closest("tr"); btn.textContent="..."; db.ref('orders/' + row.dataset.key).update({ status: row.querySelector(".adm-status").value, trackingUrl: row.querySelector(".adm-track").value.trim() }).then(() => { toast("Updated"); btn.textContent="Save"; }); }));
+}
+
+function rebuildCustomers() {
+  const map = {}; 
+  for (const o of ORDERS){ 
+      const key = (o.customer?.phone || "").toLowerCase(); if(!key) continue; 
+      if(!map[key]) map[key] = { key, name: o.customer?.name || "", phone: o.customer?.phone || "", pincode: o.customer?.pincode || "", orders: 0, total: 0 }; 
+      map[key].orders += 1; map[key].total += o.amount || 0; 
+  }
+  CUSTOMERS = Object.values(map);
+}
+
+function renderCustomersAdmin() {
+  const el = $("#customers-admin"); 
+  el.innerHTML = CUSTOMERS.length===0 ? `<div class="muted">No customers yet.</div>` : `<table class="table"><thead><tr><th>Name</th><th>Phone</th><th>Orders</th><th>Spend</th></tr></thead><tbody>${CUSTOMERS.map(c=>`<tr><td><b>${escapeHtml(c.name)}</b></td><td>${escapeHtml(c.phone)}</td><td>${c.orders}</td><td style="color:var(--primary);"><b>${money(c.total)}</b></td></tr>`).join("")}</tbody></table>`;
+}
+
+/* Chatbot using Gemini API */
+const chatbotToggle = $("#chatbot-toggle"); const chatbotPopup = $("#chatbot-popup"); const chatbotClose = $("#chatbot-close"); const chatbotBody = $("#chatbot-body"); const chatbotQuestions = $("#chatbot-questions");
+const chatInput = $("#chat-input"); const chatSend = $("#chat-send");
+
+const FAQ_DATA = [ 
+    {q: "Camera ko lagana easy hai kya?", a: "Yes! Sirf plug and play hai. Humara app se 2 minute mein connect ho jata hai."}, 
+    {q: "Kitne din ka recording save hota hai?", a: "Aap isme 128GB tak memory card laga sakte hain jo 15-20 din ki recording store karta hai."}, 
+    {q: "Mobile par live dekh sakte hain?", a: "Haan bilkul! Duniya ke kisi bhi kone se app ke through live dekhiye."}
+];
+
+function renderChatbotQuestions() { chatbotQuestions.innerHTML = FAQ_DATA.map((faq, index) => `<button class="question-chip" data-question-index="${index}">${escapeHtml(faq.q)}</button>`).join(''); $$('#chatbot-questions .question-chip').forEach(btn => btn.addEventListener('click', handleQuestionClick)); }
+
+function handleQuestionClick(e) { 
+    const btn = e.target.closest('.question-chip'); 
+    if (btn) { 
+        const i = parseInt(btn.dataset.questionIndex); 
+        addMessage(FAQ_DATA[i].q, true); 
+        chatbotQuestions.innerHTML = ''; 
+        addMessage('Typing...', false, 'typing-placeholder'); 
+        setTimeout(() => { 
+            $('.typing-placeholder')?.remove(); 
+            addMessage(FAQ_DATA[i].a); 
+            setTimeout(() => addMessage("What else can I help you with today?", false), 500); 
+        }, 800); 
+    } 
+}
+
+// Integrated Gemini AI to act as a highly persuasive sales agent
+async function handleUserTextInput() {
+    const val = chatInput.value.trim();
+    if(!val) return;
+    addMessage(val, true);
+    chatInput.value = '';
+    chatbotQuestions.innerHTML = ''; 
+    addMessage('<i class="fa-solid fa-spinner fa-spin"></i> AI is thinking...', false, 'typing-placeholder');
+    
+    const systemPrompt = "You are a real human customer support agent for SecureCam (selling smart CCTV cameras). Speak purely in Hinglish (Hindi written in English alphabet). RULE 1: NEVER write long paragraphs. RULE 2: Your replies MUST be very short, exactly 1 or 2 lines max. RULE 3: Be conversational, but always create FOMO about rising break-ins and tell them to buy the CCTV right now before stock ends. Add 1-2 emojis.";
+    
+    const response = await fetchGeminiAPI(val, systemPrompt);
+    
+    $('.typing-placeholder')?.remove();
+    addMessage(parseGeminiMarkdown(response));
+}
+
+chatSend.addEventListener('click', handleUserTextInput);
+chatInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') handleUserTextInput(); });
+
+function addMessage(text, isUser = false, className = '') { 
+    const d = document.createElement('div'); d.classList.add('chatbot-msg-container', isUser ? 'user-msg' : 'bot-msg'); 
+    const m = document.createElement('div'); m.classList.add('chatbot-msg'); if(!isUser) m.classList.add('bot'); if(className) m.classList.add(className); 
+    
+    if(!isUser) {
+        m.innerHTML = text; // Allow pre-formatted HTML from Gemini output parser and typing indicator
+    } else {
+        m.innerHTML = escapeHtml(text).replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/<br>/g, '<br>');
+    }
+    
+    d.appendChild(m); chatbotBody.appendChild(d); 
+    chatbotBody.scrollTop = chatbotBody.scrollHeight; 
+}
+
+chatbotToggle.addEventListener('click', () => { 
+    chatbotPopup.classList.toggle('visible'); 
+    if(chatbotPopup.classList.contains('visible')) { 
+        chatbotBody.innerHTML = ''; 
+        addMessage("Hi! Ghar ki security ki tension? 🚨 Hum best smart CCTV deliver karte hain. Ask me anything!"); 
+        renderChatbotQuestions(); 
+    } 
+});
+chatbotClose.addEventListener('click', () => chatbotPopup.classList.remove('visible'));
+
+/* Render Loop */
+function render(){
+  const { parts } = parseRoute();
+  if (isAdminRoute() || location.hash === "#/admin") { $("#store-app").style.display = "none"; $("#admin-app").style.display = "block"; setAdminView(); return; }
+  $("#admin-app").style.display = "none"; $("#store-app").style.display = "block";
+  if (!dataFetched.products || !dataFetched.orders || !dataFetched.ratings || !dataFetched.config) { showLoader(); return; }
+  
+  const [root_p, id, subid] = parts;
+  if (!root_p || root_p==="shop") ShopView(); 
+  else if (root_p==="home") HomeView(); 
+  else if (root_p==="product" && id) ProductView(id); 
+  else if (root_p==="quick-buy" && id) QuickBuyView(id); 
+  else if (root_p==="success-verified") SuccessVerifiedView(); 
+  else if (root_p==="cart") CartView(); 
+  else if (root_p==="checkout") CheckoutView(); 
+  else if (root_p==="terms") TermsView(); 
+  else if (root_p==="privacy") PrivacyView(); 
+  else if (root_p==="account" && id==="orders" && subid) OrderDetailView(subid); 
+  else if (root_p==="account" && id==="orders") OrdersListView(); 
+  else if (root_p==="favorites") FavoritesView(); 
+  else if (root_p==="account") AccountView(); 
+  else if (root_p==="profile" && id==="setup") ProfileEditView(true); 
+  else if (root_p==="profile") ProfileEditView(false); 
+  else if (root_p==="ai-advisor") AiAdvisorView();
+  else ShopView();
+}
+
+(function init(){ render(); })();
+</script>
+</body>
+</html>
