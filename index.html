@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,9 +16,14 @@
 
     <script>
         const firebaseConfig = {
-            databaseURL: "https://deewali-decore-default-rtdb.firebaseio.com/",
-            projectId: "deewali-decore",
-            messagingSenderId: "58828615961"
+            apiKey: "AIzaSyD2Bvn_b68QmvoQP8KUDfhonMh-_lzVB5w",
+            authDomain: "cam-2dbaa.firebaseapp.com",
+            databaseURL: "https://cam-2dbaa-default-rtdb.firebaseio.com",
+            projectId: "cam-2dbaa",
+            storageBucket: "cam-2dbaa.firebasestorage.app",
+            messagingSenderId: "888451810364",
+            appId: "1:888451810364:web:35f018dddb5adce4c92f39",
+            measurementId: "G-C9W3GMV11Q"
         };
         const app = firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
@@ -27,8 +31,8 @@
 
     <style>
         :root {
-            --primary: #0F172A;     
-            --accent: #EAB308;      
+            --primary: #000000;     
+            --accent: #FFCC00;      
             --bg: #F8FAFC;          
             --surface: #FFFFFF;     
             --line: #E2E8F0;        
@@ -75,22 +79,22 @@
         #view { animation: fadeSlideUp 0.25s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
 
         /* Topbar & Tabbar */
-        .topbar { position: sticky; top: 0; z-index: 20; background: rgba(255,255,255,0.98); backdrop-filter: saturate(180%) blur(10px); border-bottom: 1px solid var(--line); }
+        .topbar { position: sticky; top: 0; z-index: 20; background: rgba(0,0,0,0.98); backdrop-filter: saturate(180%) blur(10px); border-bottom: 2px solid var(--accent); }
         .topbar-inner { height: 60px; display: flex; align-items: center; gap: 12px; padding: 0 16px; }
-        .title { font-family: Poppins, sans-serif; font-size: 22px; font-weight: 900; font-style: italic; margin: 0; color: var(--primary); letter-spacing: -0.5px; }
+        .title { font-family: Poppins, sans-serif; font-size: 22px; font-weight: 900; font-style: italic; margin: 0; color: #FFFFFF; letter-spacing: -0.5px; }
         .title span { color: var(--accent); } 
-        .icon-round { width: 38px; height: 38px; border-radius: 999px; border: 1px solid var(--line); background: #fff; display: inline-grid; place-items: center; color: var(--primary); box-shadow: var(--shadow-sm); transition: 0.2s; }
+        .icon-round { width: 38px; height: 38px; border-radius: 999px; border: 1px solid var(--accent); background: #000; display: inline-grid; place-items: center; color: var(--accent); box-shadow: var(--shadow-sm); transition: 0.2s; }
         .icon-round:active { transform: scale(0.9); }
 
-        .tabbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; background: rgba(255,255,255,.98); border-top: 1px solid var(--line); backdrop-filter: saturate(180%) blur(10px); padding-bottom: var(--safe); }
+        .tabbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; background: rgba(0,0,0,.98); border-top: 2px solid var(--accent); backdrop-filter: saturate(180%) blur(10px); padding-bottom: var(--safe); }
         .tabbar-inner { max-width: var(--container); margin: 0 auto; display: grid; grid-template-columns: repeat(4,1fr); gap: 2px; padding: 8px 8px calc(10px + var(--safe)); }
         .tab { display: flex; flex-direction: column; align-items: center; gap: 4px; color: #94A3B8; padding: 8px 4px; border-radius: 12px; transition: 0.2s; }
-        .tab.active { color: var(--accent); background: #FEF9C3; transform: scale(1.05); }
-        .tab span { font-size: 12px; font-weight: 700; color: #0F172A; }
+        .tab.active { color: var(--primary); background: var(--accent); transform: scale(1.05); }
+        .tab span { font-size: 12px; font-weight: 700; color: inherit; }
         main { flex: 1; min-height: 0; padding-bottom: 100px; }
         
         .loader { text-align: center; padding: 40px; color: var(--muted); }
-        .loader .dot { display: inline-block; width: 10px; height: 10px; background: var(--primary); border-radius: 999px; margin: 0 3px; animation: bounce 1.4s infinite ease-in-out both; }
+        .loader .dot { display: inline-block; width: 10px; height: 10px; background: var(--accent); border-radius: 999px; margin: 0 3px; animation: bounce 1.4s infinite ease-in-out both; }
         .loader .dot:nth-child(1) { animation-delay: -.32s; }
         .loader .dot:nth-child(2) { animation-delay: -.16s; }
         @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1.0); } }
@@ -99,52 +103,52 @@
         .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); transition: transform 0.2s, box-shadow 0.2s; }
         .card.pad { padding: 18px; }
         .muted { color: var(--muted); }
-        .chip { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line); background: #fff; font-size: 13px; font-weight: 700; color: var(--primary); transition: 0.2s; }
+        .chip { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 999px; border: 1px solid var(--primary); background: #fff; font-size: 13px; font-weight: 700; color: var(--primary); transition: 0.2s; }
         .chip.active { background: var(--primary); color: #fff; border-color: var(--primary); transform: scale(1.05); }
         
         input, textarea, select { width: 100%; padding: 14px 16px; border: 1px solid var(--line); border-radius: 12px; background: #F8FAFC; font: inherit; color: #0F172A; transition: 0.2s; }
-        input:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(15,23,42,0.1); background: #fff; }
+        input:focus, textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(255,204,0,0.2); background: #fff; }
         textarea { min-height: 92px; resize: vertical; }
         label { font-size: 13px; color: #475569; margin: 12px 0 6px; display: block; font-weight: 700; }
         
-        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; font-weight: 800; font-size: 16px; border: none; border-radius: 12px; padding: 16px 20px; background: var(--accent); color: var(--accentText); box-shadow: 0 4px 15px rgba(234, 179, 8, 0.4); transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1); cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; }
-        .btn:active { transform: translateY(2px) scale(0.95); box-shadow: 0 2px 8px rgba(234, 179, 8, 0.4); }
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; font-weight: 800; font-size: 16px; border: none; border-radius: 12px; padding: 16px 20px; background: var(--accent); color: var(--accentText); box-shadow: 0 4px 15px rgba(255, 204, 0, 0.4); transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1); cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; }
+        .btn:active { transform: translateY(2px) scale(0.95); box-shadow: 0 2px 8px rgba(255, 204, 0, 0.4); }
         .btn-outline { background: transparent; color: var(--primary); border: 2px solid var(--primary); box-shadow: none; font-weight: 800; }
         .btn-outline:active { background: #F1F5F9; transform: scale(0.97); }
         .btn-block { width: 100%; }
         
-        @keyframes pulseYellow { 0% { box-shadow: 0 0 0 0 rgba(234, 179, 8, 0.6); } 70% { box-shadow: 0 0 0 12px rgba(234, 179, 8, 0); } 100% { box-shadow: 0 0 0 0 rgba(234, 179, 8, 0); } }
+        @keyframes pulseYellow { 0% { box-shadow: 0 0 0 0 rgba(255, 204, 0, 0.6); } 70% { box-shadow: 0 0 0 12px rgba(255, 204, 0, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 204, 0, 0); } }
         .btn-pulse { animation: pulseYellow 1.5s infinite; }
 
-        .shimmer-text { background: linear-gradient(90deg, var(--primary) 0%, #3B82F6 50%, var(--primary) 100%); background-size: 200% auto; color: transparent; -webkit-background-clip: text; animation: shimmer 2.5s linear infinite; font-weight: 900; }
+        .shimmer-text { background: linear-gradient(90deg, var(--primary) 0%, #333333 50%, var(--primary) 100%); background-size: 200% auto; color: transparent; -webkit-background-clip: text; animation: shimmer 2.5s linear infinite; font-weight: 900; }
         @keyframes shimmer { to { background-position: 200% center; } }
 
         /* Aggressive FOMO/Urgency Box */
-        .urgency-box { background: #FEF2F2; border: 2px dashed #EF4444; color: #B91C1C; padding: 14px; border-radius: 10px; font-size: 14px; font-weight: 700; display: flex; align-items: flex-start; gap: 12px; margin: 16px 0; animation: blinkBorderScare 1s infinite; box-shadow: inset 0 0 10px rgba(239, 68, 68, 0.1); }
-        .urgency-box i { font-size: 22px; margin-top: 2px; color: #DC2626; animation: shakeIcon 0.5s infinite; }
-        @keyframes blinkBorderScare { 0% { border-color: #EF4444; background: #FEF2F2; } 50% { border-color: #B91C1C; background: #FFF1F2; } 100% { border-color: #EF4444; background: #FEF2F2; } }
+        .urgency-box { background: #FFFBEB; border: 2px dashed var(--accent); color: #B45309; padding: 14px; border-radius: 10px; font-size: 14px; font-weight: 700; display: flex; align-items: flex-start; gap: 12px; margin: 16px 0; animation: blinkBorderScare 1s infinite; box-shadow: inset 0 0 10px rgba(255, 204, 0, 0.1); }
+        .urgency-box i { font-size: 22px; margin-top: 2px; color: #D97706; animation: shakeIcon 0.5s infinite; }
+        @keyframes blinkBorderScare { 0% { border-color: var(--accent); background: #FFFBEB; } 50% { border-color: #D97706; background: #FEF3C7; } 100% { border-color: var(--accent); background: #FFFBEB; } }
         @keyframes shakeIcon { 0%, 100% { transform: rotate(0deg); } 25% { transform: rotate(-10deg); } 75% { transform: rotate(10deg); } }
 
         /* Scare Banner */
-        .scare-banner { background: #000; color: #fff; padding: 12px 16px; display: flex; gap: 12px; align-items: center; border-bottom: 3px solid #EF4444; }
-        .scare-banner-text { flex: 1; font-size: 13px; font-weight: 700; line-height: 1.4; }
-        .scare-banner-text span { color: #F87171; font-weight: 900; font-size: 15px; }
+        .scare-banner { background: var(--primary); color: var(--accent); padding: 12px 16px; display: flex; gap: 12px; align-items: center; border-bottom: 3px solid var(--accent); }
+        .scare-banner-text { flex: 1; font-size: 13px; font-weight: 700; line-height: 1.4; color: #fff; }
+        .scare-banner-text span { color: var(--accent); font-weight: 900; font-size: 15px; }
 
         /* Ratings */
-        .star-rating { color: #F59E0B; font-size: 13px; font-weight: 800; display: flex; align-items: center; gap: 4px; }
+        .star-rating { color: var(--accent); font-size: 13px; font-weight: 800; display: flex; align-items: center; gap: 4px; }
         .star-rating .fa-regular { color: #E2E8F0; }
         .rate-stars .fa-star { cursor: pointer; transition: color .2s; }
-        .rate-stars .active { color: #F59E0B; }
+        .rate-stars .active { color: var(--accent); }
         
         /* Quantity */
         .size-btn { display: inline-flex; align-items: center; justify-content: center; height: 50px; min-width: 50px; padding: 0 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); font-weight: 800; font-size: 18px; box-shadow: var(--shadow-sm); transition: 0.2s; }
-        .size-btn.active, .size-btn:active { transform: translateY(1px); box-shadow: 0 1px 2px rgba(10,10,10,.06); background: #FEF9C3; border-color: var(--accent); border: 2px solid var(--accent); color: var(--primary); }
+        .size-btn.active, .size-btn:active { transform: translateY(1px); box-shadow: 0 1px 2px rgba(10,10,10,.06); background: #FFFBEB; border-color: var(--accent); border: 2px solid var(--accent); color: var(--primary); }
         
         .price-line { display: flex; align-items: center; gap: 6px; }
         .strike { color: #94A3B8; text-decoration: line-through; font-size: 12px; font-weight: 600;}
         
         /* Badges & Overlays */
-        .flash-deal-badge { position: absolute; top: 0; left: 0; background: #EF4444; color: #fff; font-size: 11px; font-weight: 900; padding: 6px 10px; border-radius: 8px 0 12px 0; z-index: 5; display: flex; align-items: center; gap: 4px; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 2px 2px 10px rgba(0,0,0,0.2); }
+        .flash-deal-badge { position: absolute; top: 0; left: 0; background: var(--primary); color: var(--accent); font-size: 11px; font-weight: 900; padding: 6px 10px; border-radius: 8px 0 12px 0; z-index: 5; display: flex; align-items: center; gap: 4px; text-transform: uppercase; letter-spacing: 0.5px; box-shadow: 2px 2px 10px rgba(0,0,0,0.2); }
         .trust-badge-rzp { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 12px; padding: 10px; background: #F0FDF4; border: 1px solid #10B981; border-radius: 8px; color: #047857; font-size: 13px; font-weight: 800; }
         
         .free-delivery-badge { background: #ECFDF5; border: 1px solid #A7F3D0; color: #059669; font-size: 11px; font-weight: 800; padding: 6px; border-radius: 6px; display: flex; align-items: center; gap: 6px; margin-top: 8px; text-transform: uppercase; }
@@ -220,11 +224,11 @@
             font-weight: 900; 
             border-radius: 8px; 
             box-shadow: none;
-            background: #0F172A;
-            color: #fff;
+            background: var(--primary);
+            color: var(--accent);
             animation: none; 
         }
-        .quick-buy-btn:active { background: #000; }
+        .quick-buy-btn:active { background: #333; }
 
         .hero-img { margin: 12px; border-radius: 12px; overflow: hidden; max-height: 400px; display: flex; box-shadow: var(--shadow); }
         .hero-img img { width: 100%; aspect-ratio: 1/1.2; object-fit: cover; object-position: center top; }
@@ -235,7 +239,7 @@
         .cart-item img { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid var(--line); }
         .qty { display: flex; align-items: center; gap: 12px; margin-top: 8px; }
         .circle-btn { width: 32px; height: 32px; border-radius: 999px; border: 2px solid var(--line); display: grid; place-items: center; background: #F8FAFC; color: #0F172A; font-weight: 800; font-size: 16px; }
-        .circle-btn.primary { background: #0F172A; color: #fff; border-color: #0F172A; }
+        .circle-btn.primary { background: var(--primary); color: var(--accent); border-color: var(--primary); }
 
         .sticky-sheet { position: sticky; bottom: 0; background: rgba(255,255,255,.98); backdrop-filter: blur(10px); border-top: 1px solid var(--line); padding: 16px; z-index: 10; box-shadow: 0 -4px 20px rgba(0,0,0,0.1); }
         .row { display: flex; align-items: center; justify-content: space-between; }
@@ -251,20 +255,20 @@
         .confetti span { position: absolute; width: 10px; height: 20px; border-radius: 4px; animation: fall 1.5s linear forwards; }
         @keyframes fall { to { transform: translateY(300px) rotate(360deg); opacity: 0; } }
 
-        .toast { position: fixed; left: 50%; bottom: calc(84px + var(--safe)); transform: translateX(-50%); background: #0F172A; color: #fff; padding: 12px 24px; border-radius: 999px; font-size: 14px; font-weight: 700; opacity: 0; pointer-events: none; transition: opacity .3s, transform 0.3s; z-index: 100; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+        .toast { position: fixed; left: 50%; bottom: calc(84px + var(--safe)); transform: translateX(-50%); background: var(--primary); color: var(--accent); padding: 12px 24px; border-radius: 999px; font-size: 14px; font-weight: 700; opacity: 0; pointer-events: none; transition: opacity .3s, transform 0.3s; z-index: 100; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
         .toast.show { opacity: 1; transform: translateX(-50%) translateY(-10px); }
         
-        .animated-banner-wrap { background: linear-gradient(90deg, #FF1100, #991B1B); color: #fff; overflow: hidden; white-space: nowrap; position: relative; height: 40px; line-height: 40px; text-align: center; font-size: 15px; font-weight: 900; letter-spacing: 0.5px; border-bottom: 2px solid #7F1D1D; }
+        .animated-banner-wrap { background: var(--primary); color: var(--accent); overflow: hidden; white-space: nowrap; position: relative; height: 40px; line-height: 40px; text-align: center; font-size: 15px; font-weight: 900; letter-spacing: 0.5px; border-bottom: 2px solid var(--accent); }
         .animated-banner-text { display: inline-block; padding-left: 100%; animation: marquee 15s linear infinite; }
         @keyframes marquee { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
 
         /* Security Shield CSS Animation */
         @keyframes pulseShield { 
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); } 
-            70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(16, 185, 129, 0); } 
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } 
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 204, 0, 0.7); } 
+            70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(255, 204, 0, 0); } 
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 204, 0, 0); } 
         }
-        .shield-icon { animation: pulseShield 2s infinite; color: var(--success); font-size: 50px; }
+        .shield-icon { animation: pulseShield 2s infinite; color: var(--accent); font-size: 50px; background: #000; border-radius: 50%; padding: 10px; }
 
         /* Admin CSS */
         #admin-app { display: none; }
@@ -274,44 +278,41 @@
         .table { width: 100%; border-collapse: collapse; font-size: 14px; }
         .table th, .table td { border-bottom: 1px solid var(--line); padding: 12px 8px; text-align: left; vertical-align: middle; }
         .dropzone { border: 2px dashed #94A3B8; border-radius: 12px; padding: 30px; text-align: center; background: #F8FAFC; color: var(--muted); cursor: pointer; transition: 0.2s; }
-        .dropzone:hover { border-color: var(--primary); background: #EFF6FF; }
+        .dropzone:hover { border-color: var(--primary); background: #FFFBEB; }
         
         .thumb-wrap { position: relative; display: inline-block; }
         .thumb { width: 80px; height: 80px; border-radius: 8px; overflow: hidden; border: 1px solid var(--line); }
         .thumb img { width: 100%; height: 100%; object-fit: cover; }
         .thumb-del { position: absolute; top: -6px; right: -6px; background: #EF4444; color: #fff; border: none; border-radius: 50%; width: 22px; height: 22px; font-size: 12px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.2); z-index: 5; display: flex; align-items: center; justify-content: center; }
 
-        .like-btn { position: absolute; top: 8px; right: 8px; width: 30px; height: 30px; border-radius: 999px; background: rgba(255,255,255,.95); backdrop-filter: blur(4px); display: grid; place-items: center; color: #CBD5E1; font-size: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); transition: 0.2s; z-index: 10; border: 1px solid var(--line); }
-        .like-btn.liked { color: #EF4444; transform: scale(1.15); border-color: #FECACA; background: #FEF2F2;} 
+        .like-btn { position: absolute; top: 8px; right: 8px; width: 30px; height: 30px; border-radius: 999px; background: rgba(0,0,0,.8); backdrop-filter: blur(4px); display: grid; place-items: center; color: #fff; font-size: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); transition: 0.2s; z-index: 10; border: 1px solid var(--accent); }
+        .like-btn.liked { color: var(--accent); transform: scale(1.15); } 
         .profile-head { display: flex; flex-direction: column; align-items: center; gap: 8px; margin: 12px 0 16px; }
-        .avatar { width: 96px; height: 96px; border-radius: 999px; overflow: hidden; border: 3px solid #fff; box-shadow: 0 2px 10px rgba(0,0,0,.1); }
+        .avatar { width: 96px; height: 96px; border-radius: 999px; overflow: hidden; border: 3px solid var(--accent); box-shadow: 0 2px 10px rgba(0,0,0,.1); }
         .avatar img { width: 100%; height: 100%; object-fit: cover; }
-        
-        /* Chatbot & API specific styles */
-        .chatbot-icon { position: fixed; bottom: calc(96px + var(--safe)); right: 16px; z-index: 50; width: 64px; height: 64px; border-radius: 999px; background: #000; color: #fff; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); display: flex; align-items: center; justify-content: center; font-size: 28px; cursor: pointer; transition: transform 0.2s ease-in-out; border: 2px solid #333; }
-        .chatbot-icon:hover { transform: scale(1.05); }
-        .chatbot-popup { position: fixed; bottom: calc(170px + var(--safe)); right: 16px; width: 340px; max-width: 90%; max-height: 500px; height: 450px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: flex; flex-direction: column; z-index: 50; transform: scale(0.95) translateY(20px); opacity: 0; pointer-events: none; transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.3s; overflow:hidden;}
-        .chatbot-popup.visible { transform: scale(1) translateY(0); opacity: 1; pointer-events: auto; }
-        .chatbot-header { background: #000; color: #fff; padding: 16px; display: flex; align-items: center; justify-content: space-between; font-family: Poppins, sans-serif; }
-        .chatbot-body { flex: 1; padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background: #F8FAFC; }
-        .chatbot-msg-container.user-msg { align-self: flex-end; max-width: 85%; }
-        .chatbot-msg-container.bot-msg { align-self: flex-start; max-width: 85%; }
-        .chatbot-msg { background: #000; color: #fff; padding: 12px 16px; border-radius: 18px; word-wrap: break-word; box-shadow: var(--shadow-sm); font-size: 13px; font-weight: 500; border-bottom-right-radius: 4px; line-height: 1.5; }
-        .chatbot-msg.bot { background: #FFFFFF; color: #0F172A; border: 1px solid var(--line); border-bottom-left-radius: 4px; border-bottom-right-radius: 18px; }
-        
-        .chatbot-footer-input { display: flex; padding: 12px; background: #fff; border-top: 1px solid var(--line); gap: 8px;}
-        .chatbot-footer-input input { flex: 1; padding: 10px 14px; border-radius: 20px; font-size: 13px; margin: 0; border: 1px solid var(--line);}
-        .chatbot-footer-input button { background: var(--primary); color: #fff; border: none; width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; font-size: 16px; transition: 0.2s;}
-        .chatbot-footer-input button:active { transform: scale(0.9); }
-        
-        .chatbot-questions { display: flex; flex-direction: column; gap: 8px; margin-top: 8px;}
-        .chatbot-questions .question-chip { padding: 10px 14px; background: #FFF1F2; border: 1px solid #FECACA; border-radius: 12px; cursor: pointer; color: #B91C1C; font-size: 13px; font-weight: 700; transition: background 0.2s; text-align: left; }
-        .chatbot-questions .question-chip:hover { background: #FFE4E6; }
 
-        /* AI Advisor feature styles */
-        .ai-recipe-btn { background: linear-gradient(135deg, #1E3A8A, #3B82F6); color: #fff; border: none; border-radius: 12px; padding: 16px; width: 100%; font-weight: 800; font-size: 16px; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3); transition: 0.2s; margin-top:16px; cursor:pointer;}
-        .ai-recipe-btn:active { transform: scale(0.97); }
-        .recipe-result-box { background: #F8FAFC; border: 1px solid var(--line); border-radius: 12px; padding: 16px; margin-top: 16px; font-size: 14px; line-height: 1.6; white-space: pre-wrap; display:none;}
+        /* WhatsApp Floating Button */
+        .whatsapp-float {
+            position: fixed;
+            bottom: calc(96px + var(--safe));
+            right: 16px;
+            z-index: 50;
+            width: 60px;
+            height: 60px;
+            border-radius: 999px;
+            background: #25D366;
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 35px;
+            text-decoration: none;
+            transition: transform 0.2s;
+            border: 2px solid #fff;
+        }
+        .whatsapp-float:hover { transform: scale(1.05); }
+
     </style>
 </head>
 <body>
@@ -350,14 +351,14 @@
             <button id="admin-back" class="icon-round" aria-label="Back" style="display:none; border:none;"><i class="fa-solid fa-arrow-left"></i></button>
             <h1 id="admin-title" class="title">Admin</h1>
             <div style="margin-left:auto;display:flex;gap:8px">
-                <button class="btn btn-outline" id="admin-logout" style="padding:8px 16px;">Logout</button>
-                <a class="btn btn-outline" href="#/shop" style="padding:8px 16px;">Store</a>
+                <button class="btn btn-outline" id="admin-logout" style="padding:8px 16px; border-color:var(--accent); color:var(--accent);">Logout</button>
+                <a class="btn btn-outline" href="#/shop" style="padding:8px 16px; border-color:var(--accent); color:var(--accent);">Store</a>
             </div>
         </div>
     </header>
 
     <div class="admin-wrap">
-        <div id="admin-login" class="admin-card" style="max-width:520px;margin:18px auto;display:none">
+        <div id="admin-login" class="admin-card" style="max-width:520px;margin:18px auto;display:none; border-top:4px solid var(--accent);">
             <h3 style="margin:0 0 16px;font-family:Poppins">Admin Login</h3>
             <form id="admin-login-form" autocomplete="off">
                 <label>Admin Email</label>
@@ -464,61 +465,11 @@
     </div>
 </div>
 
-<button class="chatbot-icon" id="chatbot-toggle">
-    <i class="fa-solid fa-robot"></i>
-</button>
-
-<div class="chatbot-popup" id="chatbot-popup">
-    <div class="chatbot-header">
-        <div style="font-weight:800; font-size:16px;"><i class="fa-solid fa-shield-halved" style="color:var(--accent);"></i> Security Bot ✨</div>
-        <button class="icon-round" style="background:transparent;border:none;color:var(--accentText);width:28px;height:28px;box-shadow:none;" id="chatbot-close">
-            <i class="fa-solid fa-xmark" style="font-size:20px;"></i>
-        </button>
-    </div>
-    <div class="chatbot-body" id="chatbot-body">
-        <div class="chatbot-questions" id="chatbot-questions"></div>
-    </div>
-    <div class="chatbot-footer-input">
-        <input type="text" id="chat-input" placeholder="Type a message..." autocomplete="off">
-        <button id="chat-send"><i class="fa-solid fa-paper-plane"></i></button>
-    </div>
-</div>
+<a href="https://wa.me/917644995750?text=Hello,%20mujhe%20camera%20kharidna%20hai." target="_blank" class="whatsapp-float">
+    <i class="fa-brands fa-whatsapp"></i>
+</a>
 
 <script>
-/* ===== GEMINI API CONFIGURATION ===== */
-const apiKey = ""; // API key is populated automatically by environment
-
-// Fetch wrapper with exponential backoff for Gemini API
-async function fetchGeminiAPI(promptText, systemPrompt) {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
-    const payload = {
-        contents: [{ parts: [{ text: promptText }] }],
-        systemInstruction: { parts: [{ text: systemPrompt }] }
-    };
-    
-    let retries = 5;
-    let delay = 1000;
-    
-    while(retries > 0) {
-        try {
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-            if(!response.ok) throw new Error(`API Error: ${response.status}`);
-            const data = await response.json();
-            return data.candidates?.[0]?.content?.parts?.[0]?.text || "Mafi chahunga, server busy hai. Please call support.";
-        } catch (err) {
-            retries--;
-            if(retries === 0) return "Connection error! Server slow hai. Jaldi order karo!";
-            await new Promise(r => setTimeout(r, delay));
-            delay *= 2;
-        }
-    }
-}
-
-
 /* ===== Config & Utils ===== */
 let HERO_IMAGE_URL = ""; 
 let BANNER_TEXT = "🚨 CRIME ALERT! Secure your home today with Smart CCTV. 🚨";
@@ -538,15 +489,6 @@ const readLocal = (k, d) => {
 
 const writeLocal = (k, v) => localStorage.setItem(k, JSON.stringify(v));
 const escapeHtml = (s="") => s.replace(/[&<>"']/g, m => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;" }[m]));
-
-// Parse markdown to minimal HTML for Gemini API responses
-function parseGeminiMarkdown(text) {
-    let html = escapeHtml(text);
-    html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-    html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
-    html = html.replace(/\n/g, '<br>');
-    return html;
-}
 
 const toast = (msg) => { 
     const t = $("#toast"); 
@@ -586,7 +528,6 @@ function startTimer(durationInSeconds, displayId) {
         }
         
         if (--timer < 0) { 
-            // Restart timer to keep urgency loop alive for late buyers
             timer = 15 * 60; 
         } 
     }, 1000);
@@ -652,7 +593,7 @@ function generateFakeReviewsHTML(productId, avgRating) {
                   <h3 style="margin:0; font-family:Poppins; font-size:18px; font-weight:900;">Customer Reviews</h3>
                   <div class="muted" style="font-size:12px; margin-top:2px; font-weight:600;">Based on ${totalReviewCount} verified ratings</div>
               </div>
-              <div style="font-weight:900; color:#0F172A; font-size:18px;"><i class="fa-solid fa-star" style="color:#F59E0B;"></i> ${avgRating}</div>
+              <div style="font-weight:900; color:var(--primary); font-size:18px;"><i class="fa-solid fa-star" style="color:var(--accent);"></i> ${avgRating}</div>
           </div>
           <div style="padding: 0 16px 16px 16px;">
     `;
@@ -829,14 +770,14 @@ function HomeView(){
         <div class="scare-banner-text">⚠️ <span>ALERT:</span> High break-in rates reported recently! Secure your perimeter before it's too late.</div>
       </div>
 
-      <div style="background: linear-gradient(180deg, #F0FDF4 0%, #FFFFFF 100%); padding-bottom:20px; border-bottom:1px solid var(--line);">
+      <div style="background: linear-gradient(180deg, #FFFBEB 0%, #FFFFFF 100%); padding-bottom:20px; border-bottom:1px solid var(--line);">
         ${HERO_IMAGE_URL ? `<div class="hero-img" style="margin:12px; border-radius:12px; border-bottom:1px solid var(--line);"><img src="${HERO_IMAGE_URL}"></div>` : ''}
         
         <div style="padding:16px 20px; text-align:center;">
           <div style="display:flex; justify-content:center; align-items:center; gap: 16px; margin-bottom: 12px;">
              <i class="fa-solid fa-shield-halved shield-icon"></i>
-             <div class="chip" style="background:#0F172A; border-color:#0F172A; color:#fff; font-size:13px; height: fit-content; text-align:left;">
-                <i class="fa-solid fa-video" style="color:#10B981;"></i> 24/7 Smart Monitoring
+             <div class="chip" style="background:#000; border-color:#000; color:var(--accent); font-size:13px; height: fit-content; text-align:left;">
+                <i class="fa-solid fa-video" style="color:var(--accent);"></i> 24/7 Smart Monitoring
              </div>
           </div>
 
@@ -847,7 +788,7 @@ function HomeView(){
              <div>Flash Sale Ends In: <span id="home-timer" style="font-size:18px; font-weight:900;">14:59</span></div>
           </div>
 
-          <button class="btn btn-pulse" onclick="routeTo('#/shop')" style="width:100%; max-width: 320px; font-size:18px;"><i class="fa-solid fa-camera"></i> Protect My Home Now</button>
+          <button class="btn btn-pulse" onclick="routeTo('#/shop')" style="width:100%; max-width: 320px; font-size:18px; color:var(--primary);"><i class="fa-solid fa-camera"></i> Protect My Home Now</button>
         </div>
       </div>
       
@@ -885,9 +826,9 @@ function ShopView(){
   $("#view").innerHTML = `
     <section style="background: var(--bg);">
       
-      <div class="scare-banner" style="background:#B91C1C;">
-        <i class="fa-solid fa-user-ninja" style="color:#FDE047; font-size:24px; animation: shakeIcon 0.5s infinite;"></i>
-        <div class="scare-banner-text" style="color:#fff;">Stock is clearing fast due to high demand! Limit is 3 units per customer. <span style="color:#FEF08A;">Order quickly!</span></div>
+      <div class="scare-banner" style="background:var(--primary);">
+        <i class="fa-solid fa-user-ninja" style="color:var(--accent); font-size:24px; animation: shakeIcon 0.5s infinite;"></i>
+        <div class="scare-banner-text" style="color:#fff;">Stock is clearing fast due to high demand! Limit is 3 units per customer. <span style="color:var(--accent);">Order quickly!</span></div>
       </div>
 
       <div class="filters"><button class="chip active" data-filter="all">All</button>${filtersHtml}</div>
@@ -1325,7 +1266,7 @@ function renderSuccessUI(order) {
 
 function popConfetti(){
   const c = $("#confetti"); if(!c) return;
-  c.innerHTML = ""; const colors = ["#0F172A","#EAB308","#10B981","#38BDF8","#3B82F6"];
+  c.innerHTML = ""; const colors = ["#000000","#FFCC00","#10B981","#38BDF8","#3B82F6"];
   for(let i=0;i<50;i++){
     const s = document.createElement("span");
     s.style.left = (4 + Math.random()*92) + "%";
@@ -1380,7 +1321,7 @@ function CartView(){
               <i class="fa-solid fa-cart-shopping" style="font-size:50px; color:#E2E8F0; margin-bottom:16px;"></i>
               <h2 style="font-family:Poppins; color:#0F172A; margin: 16px 0 8px;">Your cart is empty!</h2>
               <div class="muted" style="font-size:14px; margin-bottom:24px; font-weight:600;">Secure your home with the best cameras.</div>
-              <a class="btn btn-pulse" href="#/shop" style="padding:16px 24px; width:100%; max-width: 300px; margin: 0 auto; display:inline-block;"><i class="fa-solid fa-magnifying-glass"></i> Browse Deals Now</a>
+              <a class="btn btn-pulse" href="#/shop" style="padding:16px 24px; width:100%; max-width: 300px; margin: 0 auto; display:inline-block; color:var(--primary);"><i class="fa-solid fa-magnifying-glass"></i> Browse Deals Now</a>
           </div>
         </section>
       `;
@@ -1389,8 +1330,8 @@ function CartView(){
 
   $("#view").innerHTML = `
     <section style="padding:14px; background:var(--bg);">
-      <div class="scare-banner" style="background:#0F172A; margin-bottom:12px; border-radius:8px;">
-        <i class="fa-solid fa-bell" style="color:#EAB308; font-size:20px; animation: shakeIcon 0.5s infinite;"></i>
+      <div class="scare-banner" style="background:var(--primary); margin-bottom:12px; border-radius:8px;">
+        <i class="fa-solid fa-bell" style="color:var(--accent); font-size:20px; animation: shakeIcon 0.5s infinite;"></i>
         <div class="scare-banner-text" style="color:#fff; font-size:12px;">High Demand: Cart items are not reserved. Please complete checkout immediately.</div>
       </div>
 
@@ -1400,7 +1341,7 @@ function CartView(){
         <div class="row" style="margin-bottom:8px;"><div class="muted" style="font-weight:600;">Shipping Charge</div><div style="color:var(--success); font-weight:900;">FREE</div></div>
         <div class="sep"></div>
         <div class="row" style="font-weight:900; font-size:22px;"><div>Total</div><div class="shimmer-text">${money(total)}</div></div>
-        <button class="btn btn-block btn-pulse" id="to-checkout" style="padding:16px; margin-top:16px; font-size:18px;">Secure Checkout <i class="fa-solid fa-lock"></i></button>
+        <button class="btn btn-block btn-pulse" id="to-checkout" style="padding:16px; margin-top:16px; font-size:18px; color:var(--primary);">Secure Checkout <i class="fa-solid fa-lock"></i></button>
       </div>
     </section>
   `;
@@ -1464,7 +1405,7 @@ function CheckoutView(){
                 <button class="btn btn-outline" id="pay-cod-next" style="padding:14px; font-size:16px;">
                     <i class="fa-solid fa-money-bill-wave"></i> Cash on Delivery
                 </button>
-                <button class="btn btn-block btn-pulse" id="pay-online-next" style="padding:14px; font-size:16px;">
+                <button class="btn btn-block btn-pulse" id="pay-online-next" style="padding:14px; font-size:16px; color:var(--primary);">
                     Proceed to Online Pay <i class="fa-solid fa-lock" style="margin-left:5px;"></i>
                 </button>
             </div>
@@ -1508,81 +1449,32 @@ function CheckoutView(){
   });
 }
 
-/* ===== Account & Orders (WITH AI ADVISOR INTEGRATION) ===== */
+/* ===== Account & Orders ===== */
 function AccountView(){
   setTopbar("Profile", false); setActiveTab("account");
   $("#view").innerHTML = `
     <section style="padding:14px; background:var(--bg);">
-      <div class="card pad" style="background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%); color:#fff; border:none; border-radius:20px; box-shadow:0 10px 25px rgba(0,0,0,0.15);">
+      <div class="card pad" style="background: var(--primary); color:#fff; border:none; border-radius:20px; box-shadow:0 10px 25px rgba(0,0,0,0.15);">
         <div style="display:flex;align-items:center;gap:16px">
           <div class="avatar" style="border-color:rgba(255,255,255,0.1);"><img src="${PROFILE.avatar || 'https://i.pravatar.cc/200?u=insta'}"></div>
-          <div><div style="font-weight:800;font-size:22px">${escapeHtml(PROFILE.name || 'Guest User')}</div><div style="color:rgba(255,255,255,0.7); font-size:14px; font-weight:600;">${escapeHtml(PROFILE.phone || 'Complete your profile')}</div></div>
+          <div><div style="font-weight:800;font-size:22px">${escapeHtml(PROFILE.name || 'Guest User')}</div><div style="color:var(--accent); font-size:14px; font-weight:600;">${escapeHtml(PROFILE.phone || 'Complete your profile')}</div></div>
         </div>
       </div>
       
-      <button class="ai-recipe-btn" onclick="routeTo('#/ai-advisor')">
-          <i class="fa-solid fa-wand-magic-sparkles"></i> AI Security Advisor ✨
-      </button>
-
       <div class="card pad" style="margin-top:16px; border-radius:20px;">
-        <a href="#/profile" class="row" style="padding:14px 0; font-weight:700; color:#0F172A;"><div><i class="fa-regular fa-user" style="color:var(--primary); width:28px; font-size:18px;"></i> Edit Profile</div><i class="fa-solid fa-chevron-right" style="color:var(--muted); font-size:14px;"></i></a>
+        <a href="#/profile" class="row" style="padding:14px 0; font-weight:700; color:#0F172A;"><div><i class="fa-regular fa-user" style="color:var(--accent); width:28px; font-size:18px;"></i> Edit Profile</div><i class="fa-solid fa-chevron-right" style="color:var(--muted); font-size:14px;"></i></a>
         <div class="sep" style="margin:0;"></div>
-        <a href="#/account/orders" class="row" style="padding:14px 0; font-weight:700; color:#0F172A;"><div><i class="fa-solid fa-box" style="color:var(--primary); width:28px; font-size:18px;"></i> My Orders</div><i class="fa-solid fa-chevron-right" style="color:var(--muted); font-size:14px;"></i></a>
+        <a href="#/account/orders" class="row" style="padding:14px 0; font-weight:700; color:#0F172A;"><div><i class="fa-solid fa-box" style="color:var(--accent); width:28px; font-size:18px;"></i> My Orders</div><i class="fa-solid fa-chevron-right" style="color:var(--muted); font-size:14px;"></i></a>
         <div class="sep" style="margin:0;"></div>
-        <a href="#/favorites" class="row" style="padding:14px 0; font-weight:700; color:#0F172A;"><div><i class="fa-regular fa-heart" style="color:var(--primary); width:28px; font-size:18px;"></i> Saved Deals</div><i class="fa-solid fa-chevron-right" style="color:var(--muted); font-size:14px;"></i></a>
+        <a href="#/favorites" class="row" style="padding:14px 0; font-weight:700; color:#0F172A;"><div><i class="fa-regular fa-heart" style="color:var(--accent); width:28px; font-size:18px;"></i> Saved Deals</div><i class="fa-solid fa-chevron-right" style="color:var(--muted); font-size:14px;"></i></a>
       </div>
       
-      <div class="card pad" style="margin-top:16px; text-align:center; border-radius:20px; cursor:pointer; background:#ECFDF5; border-color:#6EE7B7;" onclick="$('#chatbot-toggle').click()">
-        <div style="font-weight:800; color:#047857; font-size:16px;"><i class="fa-solid fa-headset"></i> Need Help? Chat with AI</div>
-      </div>
+      <a class="card pad" style="margin-top:16px; text-align:center; border-radius:20px; display:block; text-decoration:none; background:#F0FDF4; border:1px solid #86EFAC;" href="https://wa.me/917644995750?text=Hello,%20mujhe%20camera%20kharidna%20hai." target="_blank">
+        <div style="font-weight:800; color:#16A34A; font-size:16px;"><i class="fa-brands fa-whatsapp"></i> Need Help? Chat on WhatsApp</div>
+      </a>
     </section>
   `;
 }
-
-/* ===== NEW AI ADVISOR VIEW ===== */
-function AiAdvisorView() {
-    setTopbar("AI Advisor ✨", true); setActiveTab("");
-    $("#view").innerHTML = `
-        <section style="padding:16px; background:var(--bg); min-height:100vh;">
-            <div class="card pad">
-                <h3 style="margin:0 0 8px; color:var(--primary);"><i class="fa-solid fa-shield-halved"></i> Where to install cameras?</h3>
-                <p class="muted" style="font-size:13px; margin-bottom:16px;">Apne ghar ya shop ki details yaha likhein. Hamara AI aapko batayega ki best security ke liye cameras kahan install karne chahiye!</p>
-                
-                <textarea id="advisor-details" placeholder="E.g., 2 floor ka ghar hai, ek main gate aur ek backyard hai..." style="min-height: 80px;"></textarea>
-                
-                <button class="btn btn-block" id="generate-advisor-btn" style="margin-top:16px; background: linear-gradient(135deg, #1E3A8A, #3B82F6);">Get Expert Advice ✨</button>
-            </div>
-            
-            <div id="advisor-result" class="recipe-result-box"></div>
-        </section>
-    `;
-
-    $("#generate-advisor-btn").addEventListener("click", async () => {
-        const details = $("#advisor-details").value.trim();
-        if(!details) {
-            toast("Details daaliye pehle!");
-            return;
-        }
-
-        const btn = $("#generate-advisor-btn");
-        const resultBox = $("#advisor-result");
-        
-        btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Analyzing...`;
-        btn.disabled = true;
-        resultBox.style.display = "block";
-        resultBox.innerHTML = "<div style='text-align:center; color:var(--muted);'><i class='fa-solid fa-wand-magic-sparkles fa-bounce'></i> Soch raha hu best setup...</div>";
-
-        const systemPrompt = "You are a smart security advisor for SecureCam. Give 3 quick points on where the user should install their CCTV cameras based on their property details. You must explicitly mention how easy it is to install SecureCam cameras. Keep the response formatting clean with bullet points. Respond in Hinglish (Hindi written in English alphabet). Add emojis.";
-        const userPrompt = `My property: ${details}. Give me a quick security setup advice.`;
-
-        const response = await fetchGeminiAPI(userPrompt, systemPrompt);
-        
-        resultBox.innerHTML = parseGeminiMarkdown(response);
-        btn.innerHTML = `Get Another Advice ✨`;
-        btn.disabled = false;
-    });
-}
-
 
 function ProfileEditView(isSetup=false){
   setTopbar(isSetup ? "Setup Profile" : "Edit Profile", true); setActiveTab("");
@@ -1597,7 +1489,7 @@ function ProfileEditView(isSetup=false){
         <label>Phone Number</label><input id="pfv-phone" type="tel" value="${escapeHtml(PROFILE.phone||'')}">
         <div class="row" style="gap:10px;"><div style="flex:1"><label>Pin Code</label><input id="pfv-pincode" value="${escapeHtml(PROFILE.pincode||'')}"></div><div style="flex:1"><label>City</label><input id="pfv-city" value="${escapeHtml(PROFILE.city||'')}"></div></div>
         <label style="margin-top:10px">Complete Address</label><textarea id="pfv-address">${escapeHtml(PROFILE.address||'')}</textarea>
-        <button class="btn btn-block" id="pfv-save" style="padding:16px; margin-top:24px; background:var(--primary); color:#fff;">${isSetup?'Save & Continue':'Save Changes'}</button>
+        <button class="btn btn-block" id="pfv-save" style="padding:16px; margin-top:24px; background:var(--primary); color:var(--accent);">${isSetup?'Save & Continue':'Save Changes'}</button>
       </div>
     </section>
   `;
@@ -1620,10 +1512,10 @@ function OrdersListView(){
   $("#view").innerHTML = `
     <section style="padding:14px; background:var(--bg);">
       ${rows.length===0 ? `<div class="card pad" style="text-align:center; padding:60px 20px;"><div class="muted" style="font-weight:600;">No orders placed yet.</div></div>` : rows.map(o => `
-        <a class="card pad" style="display:block;margin-bottom:16px; border-left: 4px solid #0F172A;" href="#/account/orders/${o.orderId}">
-          <div class="row"><strong style="color:#0F172A; font-size:16px;">#${escapeHtml(o.orderId)}</strong><span class="muted" style="font-size:12px; font-weight:600;">${new Date(o.createdAt).toLocaleDateString()}</span></div>
+        <a class="card pad" style="display:block;margin-bottom:16px; border-left: 4px solid var(--accent);" href="#/account/orders/${o.orderId}">
+          <div class="row"><strong style="color:var(--primary); font-size:16px;">#${escapeHtml(o.orderId)}</strong><span class="muted" style="font-size:12px; font-weight:600;">${new Date(o.createdAt).toLocaleDateString()}</span></div>
           <div class="row" style="margin-top:10px;"><div class="muted" style="font-size:14px; font-weight:500;">${escapeHtml((o.items || [{name: o.productName}]).map(i=>i.name).join(", "))}</div><div style="font-weight:900; font-size:16px;">${money(o.amount)}</div></div>
-          <div class="chip" style="margin-top:12px; font-size:12px; background:#EFF6FF; border:none; color:var(--primary);"><i class="fa-solid fa-info-circle"></i> ${escapeHtml(o.status)}</div>
+          <div class="chip" style="margin-top:12px; font-size:12px; background:#FFFBEB; border:1px solid var(--accent); color:var(--primary);"><i class="fa-solid fa-info-circle"></i> ${escapeHtml(o.status)}</div>
         </a>
       `).join("")}
     </section>
@@ -1639,7 +1531,7 @@ function OrderDetailView(orderId){
         <div style="text-align:center; padding-bottom:16px; border-bottom:1px solid var(--line);">
            <div style="font-size:13px; color:var(--muted); margin-bottom:4px; font-weight:600;">Order ID</div>
            <div style="font-weight:900; font-size:22px; color:#0F172A;">#${escapeHtml(o.orderId)}</div>
-           <div class="chip" style="margin-top:10px; font-size:13px; background:#FEFCE8; border-color:#FEF08A; color:#A16207;"><i class="fa-solid fa-clock"></i> ${escapeHtml(o.status)}</div>
+           <div class="chip" style="margin-top:10px; font-size:13px; background:#FFFBEB; border-color:var(--accent); color:var(--primary);"><i class="fa-solid fa-clock"></i> ${escapeHtml(o.status)}</div>
         </div>
         <div style="padding:16px 0;">
             <h4 style="margin:0 0 10px; font-family:Poppins; font-weight:800;">Order Summary</h4>
@@ -1682,7 +1574,6 @@ function setAdminView(){
   else { showAdmin("admin-dashboard"); adminGo("Dashboard", false); }
 }
 
-// Updated Login with Firebase Auth
 $("#admin-login-form")?.addEventListener("submit", (e)=>{ 
     e.preventDefault(); 
     const email = $("#adm-id").value.trim();
@@ -1846,77 +1737,6 @@ function renderCustomersAdmin() {
   el.innerHTML = CUSTOMERS.length===0 ? `<div class="muted">No customers yet.</div>` : `<table class="table"><thead><tr><th>Name</th><th>Phone</th><th>Orders</th><th>Spend</th></tr></thead><tbody>${CUSTOMERS.map(c=>`<tr><td><b>${escapeHtml(c.name)}</b></td><td>${escapeHtml(c.phone)}</td><td>${c.orders}</td><td style="color:var(--primary);"><b>${money(c.total)}</b></td></tr>`).join("")}</tbody></table>`;
 }
 
-/* Chatbot using Gemini API */
-const chatbotToggle = $("#chatbot-toggle"); const chatbotPopup = $("#chatbot-popup"); const chatbotClose = $("#chatbot-close"); const chatbotBody = $("#chatbot-body"); const chatbotQuestions = $("#chatbot-questions");
-const chatInput = $("#chat-input"); const chatSend = $("#chat-send");
-
-const FAQ_DATA = [ 
-    {q: "Camera ko lagana easy hai kya?", a: "Yes! Sirf plug and play hai. Humara app se 2 minute mein connect ho jata hai."}, 
-    {q: "Kitne din ka recording save hota hai?", a: "Aap isme 128GB tak memory card laga sakte hain jo 15-20 din ki recording store karta hai."}, 
-    {q: "Mobile par live dekh sakte hain?", a: "Haan bilkul! Duniya ke kisi bhi kone se app ke through live dekhiye."}
-];
-
-function renderChatbotQuestions() { chatbotQuestions.innerHTML = FAQ_DATA.map((faq, index) => `<button class="question-chip" data-question-index="${index}">${escapeHtml(faq.q)}</button>`).join(''); $$('#chatbot-questions .question-chip').forEach(btn => btn.addEventListener('click', handleQuestionClick)); }
-
-function handleQuestionClick(e) { 
-    const btn = e.target.closest('.question-chip'); 
-    if (btn) { 
-        const i = parseInt(btn.dataset.questionIndex); 
-        addMessage(FAQ_DATA[i].q, true); 
-        chatbotQuestions.innerHTML = ''; 
-        addMessage('Typing...', false, 'typing-placeholder'); 
-        setTimeout(() => { 
-            $('.typing-placeholder')?.remove(); 
-            addMessage(FAQ_DATA[i].a); 
-            setTimeout(() => addMessage("What else can I help you with today?", false), 500); 
-        }, 800); 
-    } 
-}
-
-// Integrated Gemini AI to act as a highly persuasive sales agent
-async function handleUserTextInput() {
-    const val = chatInput.value.trim();
-    if(!val) return;
-    addMessage(val, true);
-    chatInput.value = '';
-    chatbotQuestions.innerHTML = ''; 
-    addMessage('<i class="fa-solid fa-spinner fa-spin"></i> AI is thinking...', false, 'typing-placeholder');
-    
-    const systemPrompt = "You are a real human customer support agent for SecureCam (selling smart CCTV cameras). Speak purely in Hinglish (Hindi written in English alphabet). RULE 1: NEVER write long paragraphs. RULE 2: Your replies MUST be very short, exactly 1 or 2 lines max. RULE 3: Be conversational, but always create FOMO about rising break-ins and tell them to buy the CCTV right now before stock ends. Add 1-2 emojis.";
-    
-    const response = await fetchGeminiAPI(val, systemPrompt);
-    
-    $('.typing-placeholder')?.remove();
-    addMessage(parseGeminiMarkdown(response));
-}
-
-chatSend.addEventListener('click', handleUserTextInput);
-chatInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') handleUserTextInput(); });
-
-function addMessage(text, isUser = false, className = '') { 
-    const d = document.createElement('div'); d.classList.add('chatbot-msg-container', isUser ? 'user-msg' : 'bot-msg'); 
-    const m = document.createElement('div'); m.classList.add('chatbot-msg'); if(!isUser) m.classList.add('bot'); if(className) m.classList.add(className); 
-    
-    if(!isUser) {
-        m.innerHTML = text; // Allow pre-formatted HTML from Gemini output parser and typing indicator
-    } else {
-        m.innerHTML = escapeHtml(text).replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/<br>/g, '<br>');
-    }
-    
-    d.appendChild(m); chatbotBody.appendChild(d); 
-    chatbotBody.scrollTop = chatbotBody.scrollHeight; 
-}
-
-chatbotToggle.addEventListener('click', () => { 
-    chatbotPopup.classList.toggle('visible'); 
-    if(chatbotPopup.classList.contains('visible')) { 
-        chatbotBody.innerHTML = ''; 
-        addMessage("Hi! Ghar ki security ki tension? 🚨 Hum best smart CCTV deliver karte hain. Ask me anything!"); 
-        renderChatbotQuestions(); 
-    } 
-});
-chatbotClose.addEventListener('click', () => chatbotPopup.classList.remove('visible'));
-
 /* Render Loop */
 function render(){
   const { parts } = parseRoute();
@@ -1940,7 +1760,6 @@ function render(){
   else if (root_p==="account") AccountView(); 
   else if (root_p==="profile" && id==="setup") ProfileEditView(true); 
   else if (root_p==="profile") ProfileEditView(false); 
-  else if (root_p==="ai-advisor") AiAdvisorView();
   else ShopView();
 }
 
