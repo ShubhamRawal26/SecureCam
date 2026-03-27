@@ -666,6 +666,7 @@ function showLoader() {
     `; 
 }
 
+/* ===== Data Fetching with Security Fallbacks ===== */
 function checkAndRender() { 
     if (dataFetched.products && dataFetched.orders && dataFetched.ratings && dataFetched.config) {
         render(); 
@@ -677,6 +678,10 @@ productsRef.on('value', snap => {
     PRODUCTS.sort((a,b)=>b.createdAt-a.createdAt); 
     dataFetched.products = true; 
     checkAndRender(); 
+}, error => {
+    console.error("Products load error:", error);
+    dataFetched.products = true; 
+    checkAndRender();
 });
 
 ordersRef.on('value', snap => { 
@@ -685,12 +690,20 @@ ordersRef.on('value', snap => {
     rebuildCustomers(); 
     dataFetched.orders = true; 
     checkAndRender(); 
+}, error => {
+    // Yahan humne fallback laga diya. Normal users ko error aayega, par store load ho jayega.
+    console.warn("Orders read blocked for public user (This is safe & normal).");
+    dataFetched.orders = true; // Isko true kar diya taaki loading spinner hat jaye
+    checkAndRender(); 
 });
 
 ratingsRef.on('value', snap => { 
     RATINGS = snap.val() ? Object.values(snap.val()) : []; 
     dataFetched.ratings = true; 
     checkAndRender(); 
+}, error => {
+    dataFetched.ratings = true; 
+    checkAndRender();
 });
 
 appConfigRef.on('value', snap => { 
@@ -707,6 +720,9 @@ appConfigRef.on('value', snap => {
     
     dataFetched.config = true; 
     checkAndRender(); 
+}, error => {
+    dataFetched.config = true; 
+    checkAndRender();
 });
 
 /* ===== Router Setup ===== */
